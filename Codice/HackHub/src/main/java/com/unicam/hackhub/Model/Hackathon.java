@@ -37,6 +37,10 @@ public class Hackathon {
         this.listMentori.add(mentore);
     }
 
+    public Boolean addMentore(Mentore mentore){
+        return listMentori.add(mentore);
+    }
+
 
 
     public Integer getId() {

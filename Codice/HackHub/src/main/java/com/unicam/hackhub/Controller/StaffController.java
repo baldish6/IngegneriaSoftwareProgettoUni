@@ -23,23 +23,12 @@ public class StaffController {
         this.gestoreHackathon = gestoreHackathon;
     }
 
-    /*
-    private static Map<Integer, Product> productRepository = new HashMap<>();
-    static {
-        Product miele = new Product(1,"miele",23.67);
-        Product zucchero = new Product(2,"zucchero",10.89);
-
-        productRepository.put(miele.getId(), miele);
-        productRepository.put(zucchero.getId(), zucchero);
+    @GetMapping("/hacklist")
+    public ResponseEntity<Object> listHackathon(){
+        return new ResponseEntity<>(gestoreHackathon.getListHackathon(),HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/prod")
-    public ResponseEntity<Object> getProducts() {
-        return new ResponseEntity<>(productRepository.values(), HttpStatus.OK);
-    }*/
-
     @PostMapping("/addhack")
-    //@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> addHackathon(@RequestBody HackathonInfo hackathon) {
 
         Giudice giudice = (Giudice) gestoreUtente.addUtente(hackathon.giudice());
@@ -51,7 +40,18 @@ public class StaffController {
         else {
             return new ResponseEntity<>("Hackathon already exist", HttpStatus.BAD_REQUEST);
         }
+    }
 
+    @PostMapping("/addmentore")
+    public ResponseEntity<Object> addMentore(
+            @RequestParam ("hck") Integer hackathonId , @RequestBody Mentore mentore) {
+        Mentore mentore1 = (Mentore) gestoreUtente.addUtente(mentore);
+        Boolean resp = gestoreHackathon.addMentore(mentore1, hackathonId);
+        if (resp == null) {
+            return new ResponseEntity<>("Hackathon does not exist or mentore already present", HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>("Mentore added", HttpStatus.OK);
+        }
     }
 
 
