@@ -1,7 +1,9 @@
 package com.unicam.hackhub.Model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class Hackathon {
@@ -17,18 +19,22 @@ public class Hackathon {
     private Set<Mentore> listMentori = new HashSet<>();
     private Set<Team> listTeams = new HashSet<>();
 
-    public Hackathon(Integer id, String name, String regolamento, LocalDate dataScadenzaIscrizione, LocalDate dataInizio, LocalDate dataFine, String luogo, Float premio, Giudice giudice, Set<Mentore> listMentori, Set<Team> listTeams) {
+    public Hackathon(Integer id, String name, String regolamento, String dataScadenzaIscrizione, String dataInizio, String dataFine, String luogo, Float premio, Giudice giudice, Mentore mentore) {
         this.id = id;
         this.name = name;
         this.regolamento = regolamento;
-        this.dataScadenzaIscrizione = dataScadenzaIscrizione;
-        this.dataInizio = dataInizio;
-        this.dataFine = dataFine;
+
+        DateTimeFormatter dateformatter
+                = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        this.dataScadenzaIscrizione =  Objects.requireNonNull(LocalDate.parse(dataScadenzaIscrizione,dateformatter));
+        this.dataInizio = Objects.requireNonNull(LocalDate.parse(dataInizio,dateformatter));
+        this.dataFine = Objects.requireNonNull(LocalDate.parse(dataFine,dateformatter));
+
         this.luogo = luogo;
         this.premio = premio;
         this.giudice = giudice;
-        this.listMentori = listMentori;
-        this.listTeams = listTeams;
+        this.listMentori.add(mentore);
     }
 
 
