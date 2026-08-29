@@ -1,8 +1,6 @@
 package com.unicam.hackhub.Error.Global;
 
-import com.unicam.hackhub.Error.HackathonExistException;
-import com.unicam.hackhub.Error.HackathonNotExistException;
-import com.unicam.hackhub.Error.UtenteExistException;
+import com.unicam.hackhub.Error.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -26,6 +24,26 @@ public class HackathonHubExceptionController {
         return new ResponseEntity<>("Utente già esiste nel database", HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = UtenteNotExistException.class)
+    public ResponseEntity<Object> UtenteNotExist(UtenteNotExistException exception){
+        return new ResponseEntity<>("Utente NON esiste nel database", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = TeamIscrittoException.class)
+    public ResponseEntity<Object> TeamIscritto( TeamIscrittoException exception){
+        return new ResponseEntity<>("Il tuo team è già iscritto a questo hackathon", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = TeamDimensionException.class)
+    public ResponseEntity<Object> TeamDim( TeamDimensionException exception){
+        return new ResponseEntity<>("Il tuo team è troppo grande per questo hackathon", HttpStatus.NOT_FOUND);
+    }
+
+
+    @ExceptionHandler(value = UtenteNotInTeamException.class)
+    public ResponseEntity<Object> UtenteNotInTeam( UtenteNotInTeamException exception){
+        return new ResponseEntity<>("l'utente non è membro di un team", HttpStatus.NOT_FOUND);
+    }
 
 
 

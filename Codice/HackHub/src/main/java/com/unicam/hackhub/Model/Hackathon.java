@@ -1,5 +1,8 @@
 package com.unicam.hackhub.Model;
 
+import com.unicam.hackhub.Error.TeamDimensionException;
+import com.unicam.hackhub.Error.TeamIscrittoException;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
@@ -15,11 +18,12 @@ public class Hackathon {
     private LocalDate dataFine;
     private String luogo;
     private Float premio;
+    private Integer maxTeam;
     private Giudice giudice;
     private Set<Mentore> listMentori = new HashSet<>();
     private Set<Team> listTeams = new HashSet<>();
 
-    public Hackathon(Integer id, String name, String regolamento, String dataScadenzaIscrizione, String dataInizio, String dataFine, String luogo, Float premio, Giudice giudice, Mentore mentore) {
+    public Hackathon(Integer id, String name, String regolamento, String dataScadenzaIscrizione, String dataInizio, String dataFine, String luogo, Float premio,Integer maxTeam, Giudice giudice, Mentore mentore) {
         this.id = id;
         this.name = name;
         this.regolamento = regolamento;
@@ -33,6 +37,7 @@ public class Hackathon {
 
         this.luogo = luogo;
         this.premio = premio;
+        this.maxTeam = maxTeam;
         this.giudice = giudice;
         this.listMentori.add(mentore);
     }
@@ -41,6 +46,15 @@ public class Hackathon {
         return listMentori.add(mentore);
     }
 
+    public void iscriviHackathon(Team team){
+        if(listTeams.contains(team)){
+            throw new TeamIscrittoException();
+        }
+        if (team.getSize()>maxTeam){
+            throw new TeamDimensionException();
+        }
+        listTeams.add(team);
+    }
 
 
     public Integer getId() {
@@ -74,6 +88,11 @@ public class Hackathon {
     public Float getPremio() {
         return premio;
     }
+
+    public Integer getMaxTeam() {
+        return maxTeam;
+    }
+
 
     public Giudice getGiudice() {
         return giudice;
