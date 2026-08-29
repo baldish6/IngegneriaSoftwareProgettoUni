@@ -60,6 +60,13 @@ public class UtentiController {
         return new ResponseEntity<>("File aggiornato",HttpStatus.OK);
     }
 
+    @PostMapping("/invgiud")
+    public ResponseEntity<Object> inviaGiudiceSottomissione(
+            @RequestParam ("sid") Integer sottId){
+        gestoreHackathon.inviaGiudice(sottId);
+        return new ResponseEntity<>("Sottomissione inviata",HttpStatus.OK);
+    }
+
 
 
 }

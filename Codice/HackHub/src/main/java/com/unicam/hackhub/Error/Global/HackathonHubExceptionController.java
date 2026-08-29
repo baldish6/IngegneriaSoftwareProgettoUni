@@ -45,6 +45,16 @@ public class HackathonHubExceptionController {
         return new ResponseEntity<>("l'utente non è membro di un team", HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = SottInvGiudiceException.class)
+    public ResponseEntity<Object> SottInviata(  SottInvGiudiceException exception){
+        return new ResponseEntity<>("la sottomissione è già stata inviata al giudice", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = SottNotExistException.class)
+    public ResponseEntity<Object> SottNotExisy(   SottNotExistException exception){
+        return new ResponseEntity<>("la sottomissione non è presente nel database", HttpStatus.NOT_FOUND);
+    }
+
 
 
 }

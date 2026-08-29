@@ -1,5 +1,6 @@
 package com.unicam.hackhub.Service;
 
+import com.unicam.hackhub.Error.SottNotExistException;
 import com.unicam.hackhub.Model.Hackathon;
 import com.unicam.hackhub.Model.Sottomissione;
 import com.unicam.hackhub.Model.Team;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +21,7 @@ import java.util.Map;
 public class GestoreSottomissione {
 
     private static Map<Integer, Sottomissione> sottomissioneRepository = new HashMap<>();
-    private static Map<Team,Integer> teamToSottomissione = new HashMap<>();
+    private static Map<Team, Integer> teamToSottomissione = new HashMap<>();
     private static Integer tot = 0;
 
     public Sottomissione aggiornaSottomissione(Hackathon hackathon, Team team, MultipartFile file, String fileName){
@@ -36,7 +38,20 @@ public class GestoreSottomissione {
             Sottomissione sottomissione = new Sottomissione(tot,team,hackathon,fileName);
             sottomissioneRepository.put(sottomissione.getId(),sottomissione);
             teamToSottomissione.put(team,sottomissione.getId());
+            tot++;
             return sottomissione;
+        }
+    }
+
+    public void InviaGiudice(Integer sottId){
+        if (sottomissioneRepository.containsKey(sottId)){
+            Sottomissione sottomissione = sottomissioneRepository.get( sottId );
+            sottomissione.inviaGiudice();
+
+        }else {
+
+            throw new SottNotExistException();
+
         }
     }
 

@@ -82,8 +82,10 @@ public class GestoreHackathon {
         }else {
             throw new HackathonNotExistException();
         }
+    }
 
-
+    public void inviaGiudice(Integer sottId){
+        gestoreSottomissione.InviaGiudice(sottId);
     }
 
 

@@ -1,5 +1,7 @@
 package com.unicam.hackhub.Model;
 
+import com.unicam.hackhub.Error.SottInvGiudiceException;
+
 public class Sottomissione {
     private Integer id;
     private Team team;
@@ -37,4 +39,12 @@ public class Sottomissione {
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
+
+    public void inviaGiudice() {
+        if (inviaGiudice){
+            throw new SottInvGiudiceException();
+        }
+        inviaGiudice = true;
+    }
+
 }
