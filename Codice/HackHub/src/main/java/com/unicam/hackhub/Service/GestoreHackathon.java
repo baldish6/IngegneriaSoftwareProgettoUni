@@ -2,12 +2,10 @@ package com.unicam.hackhub.Service;
 
 import com.unicam.hackhub.Error.HackathonExistException;
 import com.unicam.hackhub.Error.HackathonNotExistException;
-import com.unicam.hackhub.Model.Giudice;
-import com.unicam.hackhub.Model.Hackathon;
-import com.unicam.hackhub.Model.Mentore;
-import com.unicam.hackhub.Model.Team;
+import com.unicam.hackhub.Model.*;
 import com.unicam.hackhub.Util.HackathonInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,6 +16,12 @@ import java.util.stream.Collectors;
 public class GestoreHackathon {
 
     private static Map<Integer, Hackathon> hackathonRepository = new HashMap<>();
+
+    private final GestoreSottomissione gestoreSottomissione;
+
+    public GestoreHackathon(GestoreSottomissione gestoreSottomissione) {
+        this.gestoreSottomissione = gestoreSottomissione;
+    }
 
     public Hackathon addHackathon(HackathonInfo hackathon, Giudice giudice, Mentore mentore) {
         Hackathon hackathon1 = new Hackathon(
@@ -65,6 +69,20 @@ public class GestoreHackathon {
         }else {
             throw new HackathonNotExistException();
         }
+    }
+
+    public Sottomissione aggiornaSottomissione(
+            Integer hackathonId, Team team,
+            MultipartFile file, String fileName){
+
+        if (hackathonRepository.containsKey(hackathonId)){
+            Hackathon hackathon = hackathonRepository.get(hackathonId);
+            return gestoreSottomissione.aggiornaSottomissione(hackathon,team,file,fileName);
+
+        }else {
+            throw new HackathonNotExistException();
+        }
+
 
     }
 

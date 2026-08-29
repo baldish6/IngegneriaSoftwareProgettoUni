@@ -6,8 +6,10 @@ import com.unicam.hackhub.Service.GestoreTeams;
 import com.unicam.hackhub.Service.GestoreUtente;
 import com.unicam.hackhub.Util.HackathonInfo;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/usr")
@@ -45,8 +47,17 @@ public class UtentiController {
         Hackathon hackathon = gestoreHackathon.iscriviHackathon(hackathonId,team);
         team.addHackathonIscritti(hackathon);
         return new ResponseEntity<>("iscritto all'hackathon : "+hackathon,HttpStatus.OK);
+    }
 
-
+    @RequestMapping(value = "/aggiorna", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> aggiornaSottomissione(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("fileName") String fileName,
+            @RequestParam ("usr") Integer userId,
+            @RequestParam ("hck") Integer hackathonId
+    ){
+        gestoreHackathon.aggiornaSottomissione(hackathonId,gestoreTeams.getTeam(userId),file,fileName);
+        return new ResponseEntity<>("File aggiornato",HttpStatus.OK);
     }
 
 
