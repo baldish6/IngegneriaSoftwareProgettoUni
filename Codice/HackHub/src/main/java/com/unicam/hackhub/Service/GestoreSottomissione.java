@@ -59,7 +59,7 @@ public class GestoreSottomissione {
                 .stream()
                 .filter(x->x.getHackathon().equals(hackathon))
                 .filter(y->y.getTeam().getNome().equals(nomeTeam))
-                .filter(Sottomissione::isInviatoGiudice)
+                //.filter(Sottomissione::isInviatoGiudice)
                 .findFirst()
                 .orElseThrow(SottNotExistException::new);
 

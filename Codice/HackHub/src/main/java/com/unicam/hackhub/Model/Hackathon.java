@@ -105,4 +105,16 @@ public class Hackathon {
     public Set<Team> getListTeams() {
         return listTeams;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Hackathon hackathon = (Hackathon) o;
+        return Objects.equals(id, hackathon.id) && Objects.equals(name, hackathon.name) && Objects.equals(regolamento, hackathon.regolamento) && Objects.equals(dataScadenzaIscrizione, hackathon.dataScadenzaIscrizione) && Objects.equals(dataInizio, hackathon.dataInizio) && Objects.equals(dataFine, hackathon.dataFine) && Objects.equals(luogo, hackathon.luogo) && Objects.equals(premio, hackathon.premio) && Objects.equals(maxTeam, hackathon.maxTeam) && Objects.equals(giudice, hackathon.giudice);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, regolamento, dataScadenzaIscrizione, dataInizio, dataFine, luogo, premio, maxTeam, giudice);
+    }
 }

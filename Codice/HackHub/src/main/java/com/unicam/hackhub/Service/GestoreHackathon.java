@@ -2,6 +2,7 @@ package com.unicam.hackhub.Service;
 
 import com.unicam.hackhub.Error.HackathonExistException;
 import com.unicam.hackhub.Error.HackathonNotExistException;
+import com.unicam.hackhub.Error.SottNotExistException;
 import com.unicam.hackhub.Model.*;
 import com.unicam.hackhub.Util.HackathonInfo;
 import com.unicam.hackhub.Util.ValutazioneInfo;
@@ -90,6 +91,16 @@ public class GestoreHackathon {
         }
     }
 
+    public Sottomissione getSottomissione(Integer hackathonId, String nomeTeam){
+        if (hackathonRepository.containsKey(hackathonId)){
+            Hackathon hackathon = hackathonRepository.get(hackathonId);
+            return gestoreSottomissione.getSottomissione(hackathon,nomeTeam);
+        }
+        else {
+            throw new HackathonNotExistException();
+        }
+    }
+
     public void inviaGiudice(Integer sottId){
         gestoreSottomissione.InviaGiudice(sottId);
     }
@@ -104,6 +115,9 @@ public class GestoreHackathon {
                 .orElseThrow(HackathonNotExistException::new);
 
         Sottomissione sottomissione = gestoreSottomissione.getSottomissione(hackathon,nomeTeam);
+        if (!sottomissione.isInviatoGiudice()){
+            throw new SottNotExistException();
+        }
 
        return gestoreValutazioni.addValutazione(valutazione,sottomissione);
     }

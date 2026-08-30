@@ -1,16 +1,20 @@
 package com.unicam.hackhub.Controller;
 
-import com.unicam.hackhub.Model.Giudice;
-import com.unicam.hackhub.Model.Hackathon;
-import com.unicam.hackhub.Model.Mentore;
-import com.unicam.hackhub.Model.Valutazione;
+import com.unicam.hackhub.Model.*;
 import com.unicam.hackhub.Service.GestoreHackathon;
 import com.unicam.hackhub.Service.GestoreUtente;
 import com.unicam.hackhub.Util.HackathonInfo;
 import com.unicam.hackhub.Util.ValutazioneInfo;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 
 @RestController
@@ -27,7 +31,7 @@ public class StaffController {
 
     @GetMapping("/hacklist")
     public ResponseEntity<Object> listHackathon(){
-        return new ResponseEntity<>(gestoreHackathon.getListHackathon(),HttpStatus.OK);
+        return new ResponseEntity<>(gestoreHackathon.getListHackathon().toString(),HttpStatus.OK);
     }
 
     @PostMapping("/addhack")
@@ -70,6 +74,46 @@ public class StaffController {
         else {
             return new ResponseEntity<>("La valutazione NON è stata aggiunta",HttpStatus.BAD_REQUEST);
         }
+    }
+
+
+    @GetMapping("/sott")
+    public ResponseEntity<Object> getSottomissione(
+            @RequestParam ("hck") Integer hackathonId,
+            @RequestParam ("tm") String teamNome)
+            throws FileNotFoundException {
+        Sottomissione sottomissione= gestoreHackathon.getSottomissione(hackathonId,teamNome);
+        if (sottomissione!=null){
+            return fileDownload(sottomissione.getFilePath());
+        }
+        else {
+            return new ResponseEntity<>(
+                    "Sottomissione del team richiesto per quell'hackathon non c'è nel database",
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private ResponseEntity<Object> fileDownload( String filename)
+            throws FileNotFoundException
+    {
+        String path = "src/main/resources/"+filename;
+        File file = new File(path);
+        InputStreamResource inputStreamResource = new InputStreamResource(new FileInputStream(file));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition",
+                String.format("attachment; filename=\"%s\"",file.getName()));
+        headers.add("Cache-Control","no-cache, no-store, must-revalidate");
+        headers.add("Pragma","no-cache");
+        headers.add("Expires","0");
+
+        ResponseEntity<Object> responseEntity = ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentLength(file.length())
+                .contentType(MediaType.parseMediaType("application/txt"))
+                .body(inputStreamResource);
+
+        return responseEntity;
     }
 
 
