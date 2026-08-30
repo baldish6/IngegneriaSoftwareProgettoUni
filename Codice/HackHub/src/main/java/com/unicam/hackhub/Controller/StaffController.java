@@ -3,9 +3,11 @@ package com.unicam.hackhub.Controller;
 import com.unicam.hackhub.Model.Giudice;
 import com.unicam.hackhub.Model.Hackathon;
 import com.unicam.hackhub.Model.Mentore;
+import com.unicam.hackhub.Model.Valutazione;
 import com.unicam.hackhub.Service.GestoreHackathon;
 import com.unicam.hackhub.Service.GestoreUtente;
 import com.unicam.hackhub.Util.HackathonInfo;
+import com.unicam.hackhub.Util.ValutazioneInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +53,22 @@ public class StaffController {
             return new ResponseEntity<>("Hackathon does not exist or mentore already present", HttpStatus.BAD_REQUEST);
         } else {
             return new ResponseEntity<>("Mentore added", HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/valuta")
+    public ResponseEntity<Object> valuta(
+            @RequestParam ("gdc") Integer giudiceId,
+            @RequestBody ValutazioneInfo infoVal,
+            @RequestParam ("tm") String nomeTeam
+    ){
+        Giudice giudice = (Giudice) gestoreUtente.getUtente(giudiceId);
+        Valutazione valutazione = gestoreHackathon.valuta(giudice,infoVal,nomeTeam);
+        if (valutazione!=null){
+            return  new ResponseEntity<>("La valutazione è stata aggiunta "+valutazione.toString(), HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>("La valutazione NON è stata aggiunta",HttpStatus.BAD_REQUEST);
         }
     }
 

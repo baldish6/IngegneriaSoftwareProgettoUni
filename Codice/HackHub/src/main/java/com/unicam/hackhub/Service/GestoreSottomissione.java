@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,10 +48,21 @@ public class GestoreSottomissione {
             sottomissione.inviaGiudice();
 
         }else {
-
             throw new SottNotExistException();
-
         }
+    }
+
+    public Sottomissione getSottomissione(Hackathon hackathon, String nomeTeam){
+
+        return sottomissioneRepository
+                .values()
+                .stream()
+                .filter(x->x.getHackathon().equals(hackathon))
+                .filter(y->y.getTeam().getNome().equals(nomeTeam))
+                .filter(Sottomissione::isInviatoGiudice)
+                .findFirst()
+                .orElseThrow(SottNotExistException::new);
+
     }
 
     private void upload(MultipartFile file, String fileName){

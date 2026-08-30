@@ -2,6 +2,8 @@ package com.unicam.hackhub.Model;
 
 import com.unicam.hackhub.Error.SottInvGiudiceException;
 
+import java.util.Objects;
+
 public class Sottomissione {
     private Integer id;
     private Team team;
@@ -28,7 +30,7 @@ public class Sottomissione {
         return hackathon;
     }
 
-    public Boolean getInviaGiudice() {
+    public Boolean isInviatoGiudice() {
         return inviaGiudice;
     }
 
@@ -47,4 +49,26 @@ public class Sottomissione {
         inviaGiudice = true;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Sottomissione that = (Sottomissione) o;
+        return Objects.equals(id, that.id) && Objects.equals(team, that.team) && Objects.equals(hackathon, that.hackathon) && Objects.equals(filePath, that.filePath) && Objects.equals(inviaGiudice, that.inviaGiudice);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, team, hackathon, filePath, inviaGiudice);
+    }
+
+    @Override
+    public String toString() {
+        return "Sottomissione{" +
+                "id=" + id +
+                ", team=" + team +
+                ", hackathon=" + hackathon +
+                ", filePath='" + filePath + '\'' +
+                ", inviaGiudice=" + inviaGiudice +
+                '}';
+    }
 }

@@ -4,6 +4,7 @@ import com.unicam.hackhub.Error.HackathonExistException;
 import com.unicam.hackhub.Error.HackathonNotExistException;
 import com.unicam.hackhub.Model.*;
 import com.unicam.hackhub.Util.HackathonInfo;
+import com.unicam.hackhub.Util.ValutazioneInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,8 +20,13 @@ public class GestoreHackathon {
 
     private final GestoreSottomissione gestoreSottomissione;
 
-    public GestoreHackathon(GestoreSottomissione gestoreSottomissione) {
+    private final GestoreValutazioni gestoreValutazioni;
+
+
+
+    public GestoreHackathon(GestoreSottomissione gestoreSottomissione, GestoreValutazioni gestoreValutazioni) {
         this.gestoreSottomissione = gestoreSottomissione;
+        this.gestoreValutazioni = gestoreValutazioni;
     }
 
     public Hackathon addHackathon(HackathonInfo hackathon, Giudice giudice, Mentore mentore) {
@@ -86,6 +92,20 @@ public class GestoreHackathon {
 
     public void inviaGiudice(Integer sottId){
         gestoreSottomissione.InviaGiudice(sottId);
+    }
+
+    public Valutazione valuta(Giudice giudice, ValutazioneInfo valutazione,String nomeTeam){
+
+        Hackathon hackathon = hackathonRepository
+                .values()
+                .stream()
+                .filter(x->x.getGiudice().equals(giudice))
+                .findFirst()
+                .orElseThrow(HackathonNotExistException::new);
+
+        Sottomissione sottomissione = gestoreSottomissione.getSottomissione(hackathon,nomeTeam);
+
+       return gestoreValutazioni.addValutazione(valutazione,sottomissione);
     }
 
 
