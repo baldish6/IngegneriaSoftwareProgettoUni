@@ -54,13 +54,15 @@ public class GestoreUtente {
 
 
 
-    public Utente addUtente(Utente utente) {
+    public Utente addUtente(UserInfo utente) {
         /*if (!utenteRepository.containsKey(utente.getId())) {
             utenteRepository.put(utente.getId(), utente);
             return utenteRepository.get(utente.getId());
         }*/
-       if (!utenteRepository.existsByNome(utente.getNome())) {
-           return utenteRepository.save(utente);
+       if (!utenteRepository.existsByNome(utente.nome())) {
+           return register(utente);
+           //return utenteRepository.save(utente);
+
        } else throw new UtenteExistException();
     }
 

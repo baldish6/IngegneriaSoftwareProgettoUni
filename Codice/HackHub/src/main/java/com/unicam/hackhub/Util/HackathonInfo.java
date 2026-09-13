@@ -14,6 +14,6 @@ public record HackathonInfo(
     String luogo,
     Float premio,
     Integer maxTeam,
-    Giudice giudice,
-    Mentore mentore
+    UserInfo giudice,
+    UserInfo mentore
 ) {}

@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class AuthController {
 
-
-
     private final JwtUtil jwtService;
 
     private final GestoreUtente gestoreUtente;

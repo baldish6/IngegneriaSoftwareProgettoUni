@@ -51,9 +51,16 @@ public class HackathonHubExceptionController {
     }
 
     @ExceptionHandler(value = SottNotExistException.class)
-    public ResponseEntity<Object> SottNotExisy(   SottNotExistException exception){
+    public ResponseEntity<Object> SottNotExist(   SottNotExistException exception){
         return new ResponseEntity<>("la sottomissione non è presente nel database", HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(value = NotInTeamException.class)
+    public ResponseEntity<Object> NotInTeamPresent(   NotInTeamException exception){
+        return new ResponseEntity<>(  "Non sei in nessuna squadra", HttpStatus.NOT_FOUND);
+    }
+
+
 
 
 
