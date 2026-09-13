@@ -62,7 +62,7 @@ public class StaffController {
 
     @PostMapping("/valuta")
     public ResponseEntity<Object> valuta(
-            @RequestParam ("gdc") Integer giudiceId,
+            @RequestParam ("gdc") Long giudiceId,
             @RequestBody ValutazioneInfo infoVal,
             @RequestParam ("tm") String nomeTeam
     ){

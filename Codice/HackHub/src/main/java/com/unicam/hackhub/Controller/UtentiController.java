@@ -27,7 +27,7 @@ public class UtentiController {
 
     @PostMapping("/addteam")
     public ResponseEntity<Object> addTeam(
-            @RequestParam ("usr") Integer utenteId, @RequestParam("tm") String nomeTeam) {
+            @RequestParam ("usr") Long utenteId, @RequestParam("tm") String nomeTeam) {
        Utente utente = gestoreUtente.getUtente(utenteId);
        Team team = gestoreTeams.addTeam(utente,nomeTeam);
        return new ResponseEntity<>(team.toString(), HttpStatus.OK);

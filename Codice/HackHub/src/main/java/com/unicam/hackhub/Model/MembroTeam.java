@@ -3,17 +3,17 @@ package com.unicam.hackhub.Model;
 import java.util.Objects;
 
 public class MembroTeam {
-    private Integer id;
+    private Long id;
     private Utente utente;
     private Team team;
 
-    public MembroTeam(Integer id, Utente utente, Team team) {
+    public MembroTeam(Long id, Utente utente, Team team) {
         this.id = id;
         this.utente = utente;
         this.team = team;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

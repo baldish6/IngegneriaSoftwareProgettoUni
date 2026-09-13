@@ -11,7 +11,7 @@ import java.util.Map;
 @Service
 public class GestoreTeams {
     private static Map<Integer, Team> teamRepository = new HashMap<>();
-    private static Map<Integer,Integer> utenteToteam = new HashMap<>();
+    private static Map<Long,Integer> utenteToteam = new HashMap<>();
     private int tot = 0;
 
     public Team addTeam(Utente utente,String nomeTeam) {
