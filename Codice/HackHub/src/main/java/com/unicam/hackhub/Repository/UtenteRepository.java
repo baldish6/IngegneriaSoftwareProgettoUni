@@ -1,13 +1,13 @@
 package com.unicam.hackhub.Repository;
 
 import com.unicam.hackhub.Model.Utente;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UtenteRepository extends CrudRepository<Utente, Long> {
+public interface UtenteRepository extends JpaRepository<Utente, Long> {
     Optional<Utente> findByNome(String nome);
     Boolean existsByNome(String nome);
 }

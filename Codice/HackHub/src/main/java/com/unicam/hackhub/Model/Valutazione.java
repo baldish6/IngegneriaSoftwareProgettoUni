@@ -1,13 +1,22 @@
 package com.unicam.hackhub.Model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+
+@Entity
 public class Valutazione {
-    private Integer id;
+
+    @Id
+    @GeneratedValue
+    private Long id;
+    @OneToOne
     private Sottomissione sottomissione;
     private Integer punteggio;
     private String giudizio;
 
-    public Valutazione(Integer id, Sottomissione sottomissione, Integer punteggio, String giudizio) {
-        this.id = id;
+    public Valutazione(Sottomissione sottomissione, Integer punteggio, String giudizio) {
         this.sottomissione = sottomissione;
         if (punteggio>10||punteggio<0){
             throw new IllegalArgumentException("Punteggio invalido");
@@ -16,7 +25,9 @@ public class Valutazione {
         this.giudizio = giudizio;
     }
 
-    public Integer getId() {
+    public Valutazione() {}
+
+    public Long getId() {
         return id;
     }
 

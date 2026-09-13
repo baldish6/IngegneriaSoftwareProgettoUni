@@ -2,6 +2,7 @@ package com.unicam.hackhub.Model;
 
 import com.unicam.hackhub.Error.TeamDimensionException;
 import com.unicam.hackhub.Error.TeamIscrittoException;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -9,8 +10,12 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Entity
 public class Hackathon {
-    private Integer id;
+
+    @Id
+    @GeneratedValue
+    private Long id;
     private String name;
     private String regolamento;
     private LocalDate dataScadenzaIscrizione;
@@ -19,12 +24,18 @@ public class Hackathon {
     private String luogo;
     private Float premio;
     private Integer maxTeam;
+
+    @OneToOne(cascade = CascadeType.REMOVE)
     private Giudice giudice;
+
+
+    @OneToMany
     private Set<Mentore> listMentori = new HashSet<>();
+
+    @ManyToOne
     private Set<Team> listTeams = new HashSet<>();
 
-    public Hackathon(Integer id, String name, String regolamento, String dataScadenzaIscrizione, String dataInizio, String dataFine, String luogo, Float premio,Integer maxTeam, Giudice giudice, Mentore mentore) {
-        this.id = id;
+    public Hackathon( String name, String regolamento, String dataScadenzaIscrizione, String dataInizio, String dataFine, String luogo, Float premio,Integer maxTeam, Giudice giudice, Mentore mentore) {
         this.name = name;
         this.regolamento = regolamento;
 
@@ -42,6 +53,8 @@ public class Hackathon {
         this.listMentori.add(mentore);
     }
 
+    public Hackathon() {}
+
     public Boolean addMentore(Mentore mentore){
         return listMentori.add(mentore);
     }
@@ -57,7 +70,7 @@ public class Hackathon {
     }
 
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

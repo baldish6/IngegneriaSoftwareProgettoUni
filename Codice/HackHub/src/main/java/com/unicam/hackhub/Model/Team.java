@@ -1,29 +1,37 @@
 package com.unicam.hackhub.Model;
 
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Entity
 public class Team {
-    private Integer id;
+
+    @Id
+    @GeneratedValue
+    private Long id;
     private String nome;
+    @ManyToOne
     private Set<MembroTeam> membroTeams = new HashSet<>();
+    @ManyToMany
     private ArrayList<Hackathon>  hackathonsIscritti = new ArrayList<>();
 
-    public Team(Integer id, String nome, Utente utente) {
-        this.id = id;
+    public Team( String nome, Utente utente) {
         this.nome = nome;
-        MembroTeam  membroTeam = new MembroTeam(utente.getId(),utente,this);
-
+        MembroTeam  membroTeam = new MembroTeam(utente,this);
         membroTeams.add(membroTeam);
     }
+
+    public Team() {}
 
     public void addHackathonIscritti(Hackathon hackathon) {
         this.hackathonsIscritti.add(hackathon);
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
