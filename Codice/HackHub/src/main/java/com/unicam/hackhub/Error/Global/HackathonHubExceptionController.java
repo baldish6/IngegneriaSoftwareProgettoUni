@@ -60,6 +60,16 @@ public class HackathonHubExceptionController {
         return new ResponseEntity<>(  "Non sei in nessuna squadra", HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = TeamNomeExistException.class)
+    public ResponseEntity<Object> NomeTeamPresent(  TeamNomeExistException exception){
+        return new ResponseEntity<>(  "Esiste già una squadra con questo nome", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = UtenteHaveTeamException.class)
+    public ResponseEntity<Object> UtenteInTeam(  UtenteHaveTeamException exception){
+        return new ResponseEntity<>(  "Sei già in un team", HttpStatus.NOT_FOUND);
+    }
+
 
 
 

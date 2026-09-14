@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface MembroTeamRepository  extends JpaRepository<MembroTeam,Long> {
     Optional<MembroTeam> findByUtente(Utente utente);
+    Boolean existsByUtente(Utente utente);
 }

@@ -5,6 +5,7 @@ import com.unicam.hackhub.Model.Hackathon;
 import com.unicam.hackhub.Model.Sottomissione;
 import com.unicam.hackhub.Model.Team;
 import com.unicam.hackhub.Repository.SottomissioneRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,11 +33,12 @@ public class GestoreSottomissione {
         this.sottomissioneRepository = sottomissioneRepository;
     }
 
+    @Transactional
     public Sottomissione aggiornaSottomissione(Hackathon hackathon, Team team, MultipartFile file, String fileName){
 
        // if (teamToSottomissione.containsKey(team)){
        //     Sottomissione sottomissione = sottomissioneRepository.get( teamToSottomissione.get(team) );
-        Optional<Sottomissione> optSottomissione = sottomissioneRepository.findByTeam(team);
+        Optional<Sottomissione> optSottomissione = sottomissioneRepository.findByTeamAndHackathon(team,hackathon);
         if (optSottomissione.isPresent()) {
 
             Sottomissione sottomissione =  optSottomissione.get();
@@ -56,6 +58,7 @@ public class GestoreSottomissione {
         }
     }
 
+    @Transactional
     public void InviaGiudice(Long sottId){
         /*if (sottomissioneRepository.containsKey(sottId)){
             Sottomissione sottomissione = sottomissioneRepository.get( sottId );
@@ -81,10 +84,8 @@ public class GestoreSottomissione {
                 .orElseThrow(SottNotExistException::new);*/
 
         return sottomissioneRepository
-                .findByHackathonAndTeam_NomeTeam(hackathon,nomeTeam)
+                .findByHackathonAndTeam_Nome(hackathon,nomeTeam)
                 .orElseThrow(SottNotExistException::new);
-
-
     }
 
     private void upload(MultipartFile file, String fileName){

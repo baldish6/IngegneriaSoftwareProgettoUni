@@ -61,18 +61,6 @@ public class Sottomissione {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Sottomissione that = (Sottomissione) o;
-        return Objects.equals(id, that.id) && Objects.equals(team, that.team) && Objects.equals(hackathon, that.hackathon) && Objects.equals(filePath, that.filePath) && Objects.equals(inviaGiudice, that.inviaGiudice);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, team, hackathon, filePath, inviaGiudice);
-    }
-
-    @Override
     public String toString() {
         return "Sottomissione{" +
                 "id=" + id +

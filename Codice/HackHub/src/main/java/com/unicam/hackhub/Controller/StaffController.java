@@ -58,12 +58,11 @@ public class StaffController {
     @PostMapping("/addhack")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> addHackathon(@RequestBody HackathonInfo hackathon) {
-
-        Giudice giudice = (Giudice) gestoreUtente.addUtente(hackathon.giudice());
-        Mentore mentore = (Mentore) gestoreUtente.addUtente(hackathon.mentore());
+        Giudice giudice = gestoreUtente.addGiudice(hackathon.giudice());
+        Mentore mentore = gestoreUtente.addMentore(hackathon.mentore());
         Hackathon response = gestoreHackathon.addHackathon(hackathon,giudice,mentore);
         if (response!=null){
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
         }
         else {
             return new ResponseEntity<>("Hackathon already exist", HttpStatus.BAD_REQUEST);
@@ -74,7 +73,7 @@ public class StaffController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> addMentore(
             @RequestParam ("hck") Long hackathonId , @RequestBody UserInfo mentore) {
-        Mentore mentore1 = (Mentore) gestoreUtente.addUtente(mentore);
+        Mentore mentore1 =  gestoreUtente.addMentore(mentore);
         Boolean resp = gestoreHackathon.addMentore(mentore1, hackathonId);
         if (resp == null) {
             return new ResponseEntity<>("Hackathon does not exist or mentore already present", HttpStatus.BAD_REQUEST);

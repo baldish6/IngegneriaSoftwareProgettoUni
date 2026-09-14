@@ -2,7 +2,7 @@ package com.unicam.hackhub.Controller;
 
 import com.unicam.hackhub.Model.*;
 import com.unicam.hackhub.Service.GestoreHackathon;
-import com.unicam.hackhub.Service.GestoreTeams;
+import com.unicam.hackhub.Service.GestoreTeam;
 import com.unicam.hackhub.Service.GestoreUtente;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,16 +13,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collection;
+
 @RestController
 @RequestMapping("/usr")
 public class UtentiController {
 
-    private final GestoreTeams gestoreTeams;
+    private final GestoreTeam gestoreTeam;
     private final GestoreUtente gestoreUtente;
     private final GestoreHackathon gestoreHackathon;
 
-    public UtentiController(GestoreTeams gestoreTeams, GestoreUtente gestoreUtente, GestoreHackathon gestoreHackathon) {
-        this.gestoreTeams = gestoreTeams;
+    public UtentiController(GestoreTeam  gestoreTeam, GestoreUtente gestoreUtente, GestoreHackathon gestoreHackathon) {
+        this.gestoreTeam = gestoreTeam;
         this.gestoreUtente = gestoreUtente;
         this.gestoreHackathon = gestoreHackathon;
     }
@@ -41,15 +43,15 @@ public class UtentiController {
             @RequestParam("tm") String nomeTeam) {
       // Utente utente = gestoreUtente.getUtente(utenteId);
         Utente utente = getUtenteId();
-       Team team = gestoreTeams.addTeam(utente,nomeTeam);
+       Team team = gestoreTeam.createTeam(nomeTeam, utente);
        return new ResponseEntity<>(team.toString(), HttpStatus.OK);
     }
 
     @GetMapping("/hackliblist")
     @PreAuthorize("hasAuthority('UTENTE')")
     public ResponseEntity<Object> listHackathonLiberi( ){
-        Team team = gestoreTeams.getTeam(getUtenteId());
-        return new ResponseEntity<>(gestoreHackathon.getListHackathonLiberi(team),HttpStatus.OK);
+        Team team = gestoreTeam.getTeam(getUtenteId());
+        return new ResponseEntity<>(gestoreHackathon.getListHackathonLiberi(team).toString(),HttpStatus.OK);
     }
 
     @PostMapping("/hackiscrivi")
@@ -57,11 +59,14 @@ public class UtentiController {
     public ResponseEntity<Object> listHackathonLiberi(
            // @RequestParam ("usr") Integer utenteId,
             @RequestParam ("hck") Long hackathonId){
-        Team team = gestoreTeams.getTeam(getUtenteId());
+        Team team = gestoreTeam.getTeam(getUtenteId());
         Hackathon hackathon = gestoreHackathon.iscriviHackathon(hackathonId,team);
-        team.addHackathonIscritti(hackathon);
+       team.addHackathonIscritti(hackathon);
         return new ResponseEntity<>("iscritto all'hackathon : "+hackathon,HttpStatus.OK);
     }
+
+
+
 
     @RequestMapping(value = "/aggiorna", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('UTENTE')")
@@ -71,7 +76,7 @@ public class UtentiController {
             //@RequestParam ("usr") Integer userId,
             @RequestParam ("hck") Long hackathonId
     ){
-        gestoreHackathon.aggiornaSottomissione(hackathonId,gestoreTeams.getTeam(getUtenteId()),file,fileName);
+        gestoreHackathon.aggiornaSottomissione(hackathonId,gestoreTeam.getTeam(getUtenteId()),file,fileName);
         return new ResponseEntity<>("File aggiornato",HttpStatus.OK);
     }
 

@@ -56,5 +56,12 @@ public class Utente implements UserDetails {
         return this.nome;
     }
 
-
+    @Override
+    public String toString() {
+        return "Utente{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", ruolo=" + ruolo +
+                '}';
+    }
 }

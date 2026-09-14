@@ -4,6 +4,7 @@ import com.unicam.hackhub.Model.Sottomissione;
 import com.unicam.hackhub.Model.Valutazione;
 import com.unicam.hackhub.Repository.ValutazioneRepository;
 import com.unicam.hackhub.Util.ValutazioneInfo;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -20,6 +21,8 @@ public class GestoreValutazioni {
         this.valutazioneRepository = valutazioneRepository;
     }
 
+
+    @Transactional
     public Valutazione addValutazione(ValutazioneInfo valutazioneInfo, Sottomissione sottomissione) {
 
         /*

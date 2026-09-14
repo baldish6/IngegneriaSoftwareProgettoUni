@@ -2,10 +2,7 @@ package com.unicam.hackhub.Model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Team {
@@ -14,18 +11,24 @@ public class Team {
     @GeneratedValue
     private Long id;
     private String nome;
-    @ManyToOne
+    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private Set<MembroTeam> membroTeams = new HashSet<>();
     @ManyToMany
-    private ArrayList<Hackathon>  hackathonsIscritti = new ArrayList<>();
+    private Set<Hackathon>  hackathonsIscritti = new HashSet<>();
 
-    public Team( String nome, Utente utente) {
+    public Team( String nome) {
         this.nome = nome;
-        MembroTeam  membroTeam = new MembroTeam(utente,this);
-        membroTeams.add(membroTeam);
+       // MembroTeam  membroTeam = new MembroTeam(utente,this);
+        //membroTeams.add(membroTeam);
     }
 
     public Team() {}
+
+    public Boolean addMembroTeam(Utente membro) {
+        MembroTeam membroTeam = new MembroTeam(membro,this);
+        return membroTeams.add(membroTeam);
+    }
+
 
     public void addHackathonIscritti(Hackathon hackathon) {
         this.hackathonsIscritti.add(hackathon);
@@ -33,6 +36,10 @@ public class Team {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -47,25 +54,12 @@ public class Team {
         return membroTeams.size();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Team team = (Team) o;
-        return Objects.equals(id, team.id) && Objects.equals(nome, team.nome) && Objects.equals(membroTeams, team.membroTeams) && Objects.equals(hackathonsIscritti, team.hackathonsIscritti);
+    public Set<Hackathon> getHackathonsIscritti() {
+        return hackathonsIscritti;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, nome, membroTeams, hackathonsIscritti);
-    }
 
-    @Override
-    public String toString() {
-        return "Team{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", membroTeams=" + membroTeams +
-               // ", hackathonsIscritti=" + hackathonsIscritti +
-                '}';
-    }
+
+
+
 }

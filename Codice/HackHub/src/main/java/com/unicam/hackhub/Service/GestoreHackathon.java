@@ -7,6 +7,7 @@ import com.unicam.hackhub.Model.*;
 import com.unicam.hackhub.Repository.HackathonRepository;
 import com.unicam.hackhub.Util.HackathonInfo;
 import com.unicam.hackhub.Util.ValutazioneInfo;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,7 +22,6 @@ public class GestoreHackathon {
     //private static Map<Integer, Hackathon> hackathonRepository = new HashMap<>();
 
     private final GestoreSottomissione gestoreSottomissione;
-
     private final GestoreValutazioni gestoreValutazioni;
     private final HackathonRepository hackathonRepository;
 
@@ -33,6 +33,7 @@ public class GestoreHackathon {
         this.hackathonRepository = hackathonRepository;
     }
 
+    @Transactional
     public Hackathon addHackathon(HackathonInfo hackathon, Giudice giudice, Mentore mentore) {
         Hackathon hackathon1 = new Hackathon(
                 hackathon.nome(),hackathon.regolamento(),
@@ -57,6 +58,7 @@ public class GestoreHackathon {
         return hackathonRepository.findAll();
     }
 
+    @Transactional
     public Boolean addMentore(Mentore mentore, Long hackathonId){
 
         /*
@@ -80,9 +82,13 @@ public class GestoreHackathon {
                 .stream()
                 .filter(x->x.getMaxTeam()>=size).collect(Collectors.toList());
          */
-        return hackathonRepository.findLibero(team.getSize());
+
+        Collection<Hackathon> resp = hackathonRepository.findLibero(size);
+
+        return resp;
     }
 
+    @Transactional
     public Hackathon iscriviHackathon(Long hackathonId,Team team){
         /*if (hackathonRepository.containsKey(hackathonId)){
             Hackathon hackathon = hackathonRepository.get(hackathonId);
@@ -98,6 +104,7 @@ public class GestoreHackathon {
 
     }
 
+    @Transactional
     public Sottomissione aggiornaSottomissione(
             Long hackathonId, Team team,
             MultipartFile file, String fileName){
@@ -128,10 +135,12 @@ public class GestoreHackathon {
 
     }
 
+    @Transactional
     public void inviaGiudice(Long sottId){
         gestoreSottomissione.InviaGiudice(sottId);
     }
 
+    @Transactional
     public Valutazione valuta(Giudice giudice, ValutazioneInfo valutazione,String nomeTeam){
 
        /* Hackathon hackathon = hackathonRepository

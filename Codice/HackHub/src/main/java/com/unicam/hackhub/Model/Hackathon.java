@@ -32,7 +32,7 @@ public class Hackathon {
     @OneToMany
     private Set<Mentore> listMentori = new HashSet<>();
 
-    @ManyToOne
+    @ManyToMany
     private Set<Team> listTeams = new HashSet<>();
 
     public Hackathon( String name, String regolamento, String dataScadenzaIscrizione, String dataInizio, String dataFine, String luogo, Float premio,Integer maxTeam, Giudice giudice, Mentore mentore) {
@@ -119,6 +119,7 @@ public class Hackathon {
         return listTeams;
     }
 
+    /*
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -129,5 +130,22 @@ public class Hackathon {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, regolamento, dataScadenzaIscrizione, dataInizio, dataFine, luogo, premio, maxTeam, giudice);
+    }*/
+
+    @Override
+    public String toString() {
+        return "Hackathon{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", regolamento='" + regolamento + '\'' +
+                ", dataScadenzaIscrizione=" + dataScadenzaIscrizione +
+                ", dataInizio=" + dataInizio +
+                ", dataFine=" + dataFine +
+                ", luogo='" + luogo + '\'' +
+                ", premio=" + premio +
+                ", maxTeam=" + maxTeam +
+                ", giudice=" + giudice +
+                ", listMentori=" + listMentori +
+                '}';
     }
 }
