@@ -1,5 +1,6 @@
 package com.unicam.hackhub.Service;
 
+import com.unicam.hackhub.Model.Hackathon;
 import com.unicam.hackhub.Model.Sottomissione;
 import com.unicam.hackhub.Model.Valutazione;
 import com.unicam.hackhub.Repository.ValutazioneRepository;
@@ -7,6 +8,7 @@ import com.unicam.hackhub.Util.ValutazioneInfo;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -48,4 +50,9 @@ public class GestoreValutazioni {
             return valutazioneRepository.save(valutazione);
         }
     }
+
+    public Collection<Valutazione> getListaValutazioni(Hackathon hackathon) {
+        return this.valutazioneRepository.findAllBySottomissione_Hackathon(hackathon);
+    }
+
 }

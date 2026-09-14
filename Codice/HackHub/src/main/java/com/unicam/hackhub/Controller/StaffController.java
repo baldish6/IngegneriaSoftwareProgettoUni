@@ -140,6 +140,12 @@ public class StaffController {
         return new ResponseEntity<>("La nuova data è : "+tempo.getTime(),HttpStatus.OK);
     }
 
+    @GetMapping("/listval")
+    @PreAuthorize("hasAuthority('GIUDICE')")
+    public ResponseEntity<Object> getListaValutazioni(){
+        return new ResponseEntity<>(gestoreHackathon.getListaValutazioni(getGiudice()),HttpStatus.OK);
+    }
+
 
 
     }

@@ -177,5 +177,11 @@ public class GestoreHackathon {
         return  gestoreSottomissione.getSottomissione(team,hackathon);
     }
 
+    public Collection<Valutazione> getListaValutazioni(Giudice giudice){
+        Hackathon hackathon = hackathonRepository.findByGiudice(giudice).orElseThrow(HackathonNotExistException::new);
+        return gestoreValutazioni.getListaValutazioni(hackathon);
+
+    }
+
 
 }
