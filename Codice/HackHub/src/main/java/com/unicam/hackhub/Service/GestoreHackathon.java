@@ -6,9 +6,7 @@ import com.unicam.hackhub.Error.PaymentException;
 import com.unicam.hackhub.Error.SottNotExistException;
 import com.unicam.hackhub.Model.*;
 import com.unicam.hackhub.Repository.HackathonRepository;
-import com.unicam.hackhub.Util.ExtPaymentApi;
-import com.unicam.hackhub.Util.HackathonInfo;
-import com.unicam.hackhub.Util.ValutazioneInfo;
+import com.unicam.hackhub.Util.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +24,7 @@ public class GestoreHackathon {
     private final GestoreSottomissione gestoreSottomissione;
     private final GestoreValutazioni gestoreValutazioni;
     private final HackathonRepository hackathonRepository;
+    private ITempo tempo = Tempo.getInstance();
 
 
     public GestoreHackathon(GestoreSottomissione gestoreSottomissione, GestoreValutazioni gestoreValutazioni,
@@ -49,7 +48,10 @@ public class GestoreHackathon {
         }
         */
         if (!hackathonRepository.existsByName(hackathon.nome())) {
-           return hackathonRepository.save(hackathon1);
+           Hackathon resp =  hackathonRepository.save(hackathon1);
+           tempo.subscribe(resp);
+           resp.update(tempo.getTime());
+           return resp;
         }else {
             throw new HackathonExistException();
         }
@@ -206,6 +208,8 @@ public class GestoreHackathon {
         }
 
         gestoreValutazioni.giveResult(hackathon);
+
+        tempo.unsubscribe(hackathon);
 
 
     }

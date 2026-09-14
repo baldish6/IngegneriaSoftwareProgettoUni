@@ -4,18 +4,17 @@ import com.unicam.hackhub.Error.TeamDimensionException;
 import com.unicam.hackhub.Error.TeamIscrittoException;
 import com.unicam.hackhub.Error.TeamNotIscrittoException;
 import com.unicam.hackhub.Error.WinnerExistException;
+import com.unicam.hackhub.Util.*;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import static com.unicam.hackhub.Util.GetDateFromString.getLocalDate;
 
 @Entity
-public class Hackathon {
+public class Hackathon implements ITimeListener {
 
     @Id
     @GeneratedValue
@@ -31,6 +30,9 @@ public class Hackathon {
     @OneToOne
     private Team winnerTeam=null;
 
+    @OneToOne
+    private HackStato stato;
+
     @OneToOne(cascade = CascadeType.REMOVE)
     private Giudice giudice;
 
@@ -44,9 +46,6 @@ public class Hackathon {
     public Hackathon( String name, String regolamento, String dataScadenzaIscrizione, String dataInizio, String dataFine, String luogo, Float premio,Integer maxTeam, Giudice giudice, Mentore mentore) {
         this.name = name;
         this.regolamento = regolamento;
-
-
-
         this.dataScadenzaIscrizione =  getLocalDate(dataScadenzaIscrizione);
         this.dataInizio = getLocalDate(dataInizio);
         this.dataFine = getLocalDate(dataFine);
@@ -56,6 +55,7 @@ public class Hackathon {
         this.maxTeam = maxTeam;
         this.giudice = giudice;
         this.listMentori.add(mentore);
+        this.stato=new inIscrizione(this);
     }
 
     public Hackathon() {}
@@ -86,6 +86,7 @@ public class Hackathon {
             throw new WinnerExistException();
         }
         winnerTeam = team;
+        changeState(new Concluso(this));
     }
 
 
@@ -172,5 +173,27 @@ public class Hackathon {
                 ", giudice=" + giudice +
                 ", listMentori=" + listMentori +
                 '}';
+    }
+
+    public void changeState(HackStato state) {
+        this.stato = state;
+    }
+
+    @Override
+    public void update(LocalDate time) {
+
+        if (dataFine.isBefore(time)) {
+            changeState(new inValutazione(this));
+        }
+        if (dataInizio.isBefore(time)) {
+            changeState(new inCorso(this));
+        }
+
+        if (dataScadenzaIscrizione.isBefore(time)) {
+            changeState(new inCorso(this));
+        }
+
+
+
     }
 }

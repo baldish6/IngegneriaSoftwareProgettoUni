@@ -70,6 +70,10 @@ public class StaffController {
         return new ResponseEntity<>(gestoreHackathon.getListHackathon().toString(),HttpStatus.OK);
     }
 
+
+
+    /* ------- ADMIN --------------------- */
+
     @PostMapping("/addhack")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> addHackathon(@RequestBody HackathonInfo hackathon) {
@@ -97,24 +101,6 @@ public class StaffController {
         }
     }
 
-    @PostMapping("/valuta")
-    @PreAuthorize("hasAuthority('GIUDICE')")
-    public ResponseEntity<Object> valuta(
-            //@RequestParam ("gdc") Long giudiceId,
-            @RequestBody ValutazioneInfo infoVal,
-            @RequestParam ("tm") String nomeTeam
-    ){
-        //Giudice giudice = (Giudice) gestoreUtente.getUtente(giudiceId);
-        Valutazione valutazione = gestoreHackathon.valuta(getGiudice(),infoVal,nomeTeam);
-        if (valutazione!=null){
-            return  new ResponseEntity<>("La valutazione è stata aggiunta "+valutazione.toString(), HttpStatus.OK);
-        }
-        else {
-            return new ResponseEntity<>("La valutazione NON è stata aggiunta",HttpStatus.BAD_REQUEST);
-        }
-    }
-
-
     @GetMapping("/sott")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> getSottomissione(
@@ -132,21 +118,24 @@ public class StaffController {
         }
     }
 
-    @GetMapping("/time")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Object> getTime(){
-        return new ResponseEntity<>(tempo.getTime(),HttpStatus.OK);
-    }
+    /* ------- GIUDICE --------------------- */
 
-    @PostMapping("/newtime")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Object> changeTime(
-            @RequestParam ("time") String nuovaData
 
+    @PostMapping("/valuta")
+    @PreAuthorize("hasAuthority('GIUDICE')")
+    public ResponseEntity<Object> valuta(
+            //@RequestParam ("gdc") Long giudiceId,
+            @RequestBody ValutazioneInfo infoVal,
+            @RequestParam ("tm") String nomeTeam
     ){
-        LocalDate newDate = getLocalDate(nuovaData);
-        tempo.changeTime(newDate);
-        return new ResponseEntity<>("La nuova data è : "+tempo.getTime(),HttpStatus.OK);
+        //Giudice giudice = (Giudice) gestoreUtente.getUtente(giudiceId);
+        Valutazione valutazione = gestoreHackathon.valuta(getGiudice(),infoVal,nomeTeam);
+        if (valutazione!=null){
+            return  new ResponseEntity<>("La valutazione è stata aggiunta "+valutazione.toString(), HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>("La valutazione NON è stata aggiunta",HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/listval")
@@ -154,6 +143,9 @@ public class StaffController {
     public ResponseEntity<Object> getListaValutazioni(){
         return new ResponseEntity<>(gestoreHackathon.getListaValutazioni(getGiudice()),HttpStatus.OK);
     }
+
+
+    /* ------- MENTORE --------------------- */
 
     @GetMapping("/listrich")
     @PreAuthorize("hasAuthority('MENTORE')")
@@ -193,6 +185,25 @@ public class StaffController {
     public ResponseEntity<Object> deleteSegnalazione(@RequestParam("tm") String nomeTeam){
         gestoreSegnalazioni.deleteSegnalazione(getMentore(),nomeTeam);
         return new ResponseEntity<>("Segnalazione eliminata",HttpStatus.OK);
+    }
+
+    /* ------- ADMIN --------------------- */
+
+    @GetMapping("/time")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Object> getTime(){
+        return new ResponseEntity<>(tempo.getTime(),HttpStatus.OK);
+    }
+
+    @PostMapping("/newtime")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Object> changeTime(
+            @RequestParam ("time") String nuovaData
+
+    ){
+        LocalDate newDate = getLocalDate(nuovaData);
+        tempo.changeTime(newDate);
+        return new ResponseEntity<>("La nuova data è : "+tempo.getTime(),HttpStatus.OK);
     }
 
     @GetMapping("/listallsegn")
@@ -245,11 +256,6 @@ public class StaffController {
        gestoreHackathon.declareWinner(hackathonId,team);
        return new ResponseEntity<>("Vincitore aggiunto",HttpStatus.OK);
     }
-
-
-
-
-
 
 
 
