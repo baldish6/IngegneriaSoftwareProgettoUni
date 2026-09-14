@@ -2,6 +2,8 @@ package com.unicam.hackhub.Model;
 
 import com.unicam.hackhub.Error.TeamDimensionException;
 import com.unicam.hackhub.Error.TeamIscrittoException;
+import com.unicam.hackhub.Error.TeamNotIscrittoException;
+import com.unicam.hackhub.Error.WinnerExistException;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -26,6 +28,7 @@ public class Hackathon {
     private String luogo;
     private Float premio;
     private Integer maxTeam;
+    private Team winnerTeam;
 
     @OneToOne(cascade = CascadeType.REMOVE)
     private Giudice giudice;
@@ -72,6 +75,16 @@ public class Hackathon {
 
     public void teamRemoved(Team team){
         listTeams.remove(team);
+    }
+
+    public void declareWinner(Team team){
+        if (!listTeams.contains(team)){
+            throw new TeamNotIscrittoException();
+        }
+        if (winnerTeam!=null){
+            throw new WinnerExistException();
+        }
+        winnerTeam = team;
     }
 
 

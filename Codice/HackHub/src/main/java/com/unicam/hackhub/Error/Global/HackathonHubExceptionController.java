@@ -101,6 +101,21 @@ public class HackathonHubExceptionController {
         return new ResponseEntity<>(  "La segnalazione non è nel database", HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = TeamNotIscrittoException.class)
+    public ResponseEntity<Object> TeamNotIscritto(  TeamNotIscrittoException exception){
+        return new ResponseEntity<>(  "Questo team non è iscritto a questo hackathon", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = WinnerExistException.class)
+    public ResponseEntity<Object> WinnerAlreadyExist(  WinnerExistException exception){
+        return new ResponseEntity<>(  "Esiste già un vincitore per questo hackathon", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = PaymentException.class)
+    public ResponseEntity<Object> PaymentError(  PaymentException exception){
+        return new ResponseEntity<>(  "c'è stato un problema con il sistema di pagamento", HttpStatus.NOT_FOUND);
+    }
+
 
 
 

@@ -2,9 +2,11 @@ package com.unicam.hackhub.Service;
 
 import com.unicam.hackhub.Error.HackathonExistException;
 import com.unicam.hackhub.Error.HackathonNotExistException;
+import com.unicam.hackhub.Error.PaymentException;
 import com.unicam.hackhub.Error.SottNotExistException;
 import com.unicam.hackhub.Model.*;
 import com.unicam.hackhub.Repository.HackathonRepository;
+import com.unicam.hackhub.Util.ExtPaymentApi;
 import com.unicam.hackhub.Util.HackathonInfo;
 import com.unicam.hackhub.Util.ValutazioneInfo;
 import jakarta.transaction.Transactional;
@@ -184,11 +186,23 @@ public class GestoreHackathon {
 
     public void teamRemoved(Team team){
         team.getHackathonsIscritti().forEach(x->{
-
             x.teamRemoved(team);
             gestoreValutazioni.deleteValutazione(x,team);
             gestoreSottomissione.deleteSottomissione(team,x);
         });
+    }
+
+    public void declareWinner(Long hackathonId,Team team){
+        Hackathon hackathon = hackathonRepository.findById(hackathonId).orElseThrow(HackathonNotExistException::new);
+        hackathon.declareWinner(team);
+        Float premio = hackathon.getPremio();
+        Boolean resp = ExtPaymentApi.givePremio(team,premio);
+        if (!resp){
+            throw new PaymentException();
+        }
+
+        gestoreValutazioni.giveResult(hackathon);
+
 
     }
 

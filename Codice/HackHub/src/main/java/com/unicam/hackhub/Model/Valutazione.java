@@ -54,6 +54,11 @@ public class Valutazione {
         this.giudizio = giudizio;
     }
 
+    public void giveResult(Hackathon hackathon){
+        Team team = this.sottomissione.getTeam();
+        team.giveResult(this,hackathon);
+    }
+
     @Override
     public String toString() {
         return "Valutazione{" +

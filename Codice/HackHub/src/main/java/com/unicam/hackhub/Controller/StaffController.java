@@ -234,7 +234,16 @@ public class StaffController {
         });
 
         return new ResponseEntity<>("Team sospeso",HttpStatus.OK);
+    }
 
+    @PostMapping("/win")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Object> declareWinner(@RequestParam("sgn") Long hackathonId,
+                                                @RequestParam("tm") String nomeTeam)
+    {
+       Team team = gestoreTeam.getTeam(nomeTeam);
+       gestoreHackathon.declareWinner(hackathonId,team);
+       return new ResponseEntity<>("Vincitore aggiunto",HttpStatus.OK);
 
     }
 

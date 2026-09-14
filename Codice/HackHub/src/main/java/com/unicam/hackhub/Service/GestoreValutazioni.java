@@ -60,4 +60,12 @@ public class GestoreValutazioni {
         this.valutazioneRepository.deleteBySottomissione_HackathonAndSottomissione_Team(hackathon, team);
     }
 
+    public void giveResult(Hackathon hackathon) {
+
+        valutazioneRepository
+                .findAllBySottomissione_Hackathon(hackathon)
+                .forEach(x->x.giveResult(hackathon));
+
+    }
+
 }

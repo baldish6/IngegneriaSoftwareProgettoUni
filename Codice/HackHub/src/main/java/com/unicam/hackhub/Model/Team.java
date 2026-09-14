@@ -54,6 +54,19 @@ public class Team {
         messaggi.add(newmessaggio);
     }
 
+    public void giveResult(Long hackathonId, String  hackathonNome, Float premio) {
+        String messaggio = "Congratulazioni!! Hai vinto l'hackathon "+hackathonNome+" con id "+hackathonId+
+                " . Riceverai in premio "+premio+"$ soldi.";
+        messaggi.add(messaggio);
+    }
+
+    public void giveResult(Valutazione valutazione,Hackathon hackathon){
+        String messaggio = "Per l'hackathon "+hackathon.getName()+" con id "+hackathon.getId()+
+                "hai ricevuto la sequente valutazione: punteggio "+valutazione.getPunteggio()+
+                " e giudizio"+valutazione.getGiudizio();
+        messaggi.add(messaggio);
+    }
+
     public void quitTeam(MembroTeam membroTeam) {
         membroTeams.remove(membroTeam);
     }
