@@ -10,6 +10,8 @@ import com.unicam.hackhub.Repository.TeamRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class GestoreTeam {
 
@@ -44,6 +46,10 @@ public class GestoreTeam {
                 .findByUtente(utente)
                 .orElseThrow(NotInTeamException::new)
                 .getTeam();
+    }
+
+    public List<String> getMessaggi(Utente utente) {
+        return getTeam(utente).getMessaggi();
     }
 
 

@@ -16,7 +16,7 @@ public class Team {
     @ManyToMany
     private Set<Hackathon>  hackathonsIscritti = new HashSet<>();
 
-   
+   private List<String> messaggi = new ArrayList<>();
 
     public Team( String nome) {
         this.nome = nome;
@@ -60,5 +60,7 @@ public class Team {
         return hackathonsIscritti;
     }
 
-
+    public List<String> getMessaggi() {
+        return messaggi;
+    }
 }

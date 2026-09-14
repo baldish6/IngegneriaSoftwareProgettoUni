@@ -107,6 +107,12 @@ public class UtentiController {
         return new ResponseEntity<>(resp,HttpStatus.OK);
     }
 
+    @GetMapping("/msg")
+    @PreAuthorize("hasAuthority('UTENTE')")
+    public ResponseEntity<Object> getMessaggi(){
+        return new ResponseEntity<>(gestoreTeam.getMessaggi(getUtenteId()).toString(),HttpStatus.OK);
+    }
+
 
 
 
