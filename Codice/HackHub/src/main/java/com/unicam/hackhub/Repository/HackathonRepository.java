@@ -17,4 +17,6 @@ public interface HackathonRepository extends JpaRepository<Hackathon,Long> {
 
     Optional<Hackathon> findByGiudice(Giudice giudice);
 
+
+
 }

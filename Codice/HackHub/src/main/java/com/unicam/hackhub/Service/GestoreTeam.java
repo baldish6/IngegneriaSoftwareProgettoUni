@@ -4,6 +4,7 @@ import com.unicam.hackhub.Error.NotInTeamException;
 import com.unicam.hackhub.Error.TeamNomeExistException;
 import com.unicam.hackhub.Error.TeamNotExistException;
 import com.unicam.hackhub.Error.UtenteHaveTeamException;
+import com.unicam.hackhub.Model.MembroTeam;
 import com.unicam.hackhub.Model.Team;
 import com.unicam.hackhub.Model.Utente;
 import com.unicam.hackhub.Repository.MembroTeamRepository;
@@ -55,6 +56,24 @@ public class GestoreTeam {
 
     public List<String> getMessaggi(Utente utente) {
         return getTeam(utente).getMessaggi();
+    }
+
+    public Team quitTeam(Utente utente) {
+
+        MembroTeam membroTeam = membroTeamRepository
+                .findByUtente(utente)
+                .orElseThrow(NotInTeamException::new);
+
+        Team team = membroTeam.getTeam();
+
+        team.quitTeam(membroTeam);
+
+        return team;
+    }
+
+    public void deleteTeam(Team team) {
+        teamRepository.delete(team);
+
     }
 
 

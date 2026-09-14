@@ -180,6 +180,15 @@ public class GestoreHackathon {
     public Collection<Valutazione> getListaValutazioni(Giudice giudice){
         Hackathon hackathon = hackathonRepository.findByGiudice(giudice).orElseThrow(HackathonNotExistException::new);
         return gestoreValutazioni.getListaValutazioni(hackathon);
+    }
+
+    public void teamRemoved(Team team){
+        team.getHackathonsIscritti().forEach(x->{
+
+            x.teamRemoved(team);
+            gestoreValutazioni.deleteValutazione(x,team);
+            gestoreSottomissione.deleteSottomissione(team,x);
+        });
 
     }
 

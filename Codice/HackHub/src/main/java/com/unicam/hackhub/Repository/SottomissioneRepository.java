@@ -14,5 +14,6 @@ import java.util.Optional;
 public interface SottomissioneRepository extends JpaRepository<Sottomissione,Long> {
     Optional<Sottomissione> findByTeamAndHackathon(Team team, Hackathon hackathon);
     Optional<Sottomissione> findByHackathonAndTeam_Nome(Hackathon hackathon, String teamNomeTeam);
-    Optional<Sottomissione> deleteByTeamAndHackathon(Team team, Hackathon hackathon);
+    void deleteByTeamAndHackathon(Team team, Hackathon hackathon);
+
 }

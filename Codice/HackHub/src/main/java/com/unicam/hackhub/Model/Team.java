@@ -54,6 +54,14 @@ public class Team {
         messaggi.add(newmessaggio);
     }
 
+    public void quitTeam(MembroTeam membroTeam) {
+        membroTeams.remove(membroTeam);
+    }
+
+    public Boolean isTeamEmpty() {
+        return membroTeams.isEmpty();
+    }
+
     public Long getId() {
         return id;
     }

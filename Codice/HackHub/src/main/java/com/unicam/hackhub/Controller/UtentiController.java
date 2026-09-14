@@ -141,12 +141,27 @@ public class UtentiController {
 
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delusr")
     @PreAuthorize("hasAuthority('UTENTE')")
     public ResponseEntity<Object> deleteAccount(){
         gestoreUtente.deleteUtente(getUtenteId().getId());
         return new ResponseEntity<>("Account Eliminato",HttpStatus.OK);
     }
+
+    @DeleteMapping("/quit")
+    @PreAuthorize("hasAuthority('UTENTE')")
+    public ResponseEntity<Object> quitTeam(){
+        Team team = gestoreTeam.quitTeam(getUtenteId());
+       if ( team.isTeamEmpty() ){
+           gestoreRichieste.teamRemoved(team);
+           gestoreHackathon.teamRemoved(team);
+           gestoreTeam.deleteTeam(team);
+       }
+
+        return new ResponseEntity<>("Team abbandonato",HttpStatus.OK);
+
+    }
+
 
 
 

@@ -70,6 +70,10 @@ public class Hackathon {
         listTeams.add(team);
     }
 
+    public void teamRemoved(Team team){
+        listTeams.remove(team);
+    }
+
 
     public Long getId() {
         return id;

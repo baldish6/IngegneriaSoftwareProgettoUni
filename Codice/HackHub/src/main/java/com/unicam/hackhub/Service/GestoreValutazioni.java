@@ -2,6 +2,7 @@ package com.unicam.hackhub.Service;
 
 import com.unicam.hackhub.Model.Hackathon;
 import com.unicam.hackhub.Model.Sottomissione;
+import com.unicam.hackhub.Model.Team;
 import com.unicam.hackhub.Model.Valutazione;
 import com.unicam.hackhub.Repository.ValutazioneRepository;
 import com.unicam.hackhub.Util.ValutazioneInfo;
@@ -53,6 +54,10 @@ public class GestoreValutazioni {
 
     public Collection<Valutazione> getListaValutazioni(Hackathon hackathon) {
         return this.valutazioneRepository.findAllBySottomissione_Hackathon(hackathon);
+    }
+
+    public void deleteValutazione(Hackathon hackathon, Team team) {
+        this.valutazioneRepository.deleteBySottomissione_HackathonAndSottomissione_Team(hackathon, team);
     }
 
 }

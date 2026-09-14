@@ -47,5 +47,9 @@ public class GestoreRichieste {
         richiestaRepository.deleteById(richiestaId);
     }
 
+    public void teamRemoved(Team team){
+        richiestaRepository.deleteAllByTeam(team);
+    }
+
 
 }
