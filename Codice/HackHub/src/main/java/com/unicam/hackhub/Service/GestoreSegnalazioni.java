@@ -1,6 +1,7 @@
 package com.unicam.hackhub.Service;
 
 import com.unicam.hackhub.Error.SegnalazioneExistException;
+import com.unicam.hackhub.Error.SegnalazioneNotExistException;
 import com.unicam.hackhub.Model.Mentore;
 import com.unicam.hackhub.Model.Segnalazione;
 import com.unicam.hackhub.Model.Team;
@@ -8,6 +9,7 @@ import com.unicam.hackhub.Repository.SegnalazioneRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class GestoreSegnalazioni {
@@ -31,6 +33,22 @@ public class GestoreSegnalazioni {
 
     public void deleteSegnalazione(Mentore mentore,String nomeTeam) {
         segnalazioneRepository.deleteByMentoreAndTeam_Nome(mentore,nomeTeam);
+    }
+
+    public List<Segnalazione> getListAllSegnalazioni(){
+        return segnalazioneRepository.findAll();
+    }
+
+    public void ignoraSegnalazione(Long segnalazioneId) {
+        segnalazioneRepository.deleteById(segnalazioneId);
+    }
+
+    public void inviaAvvertimento(Long segnalazioneId, String messaggio) {
+        segnalazioneRepository
+                .findById(segnalazioneId)
+                .orElseThrow(SegnalazioneNotExistException::new)
+                .inviaAvvertimento(messaggio);
 
     }
+
 }

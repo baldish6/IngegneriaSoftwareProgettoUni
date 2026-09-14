@@ -19,6 +19,7 @@ import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 import static com.unicam.hackhub.Util.FileDownloadUtil.fileDownload;
@@ -191,6 +192,28 @@ public class StaffController {
     public ResponseEntity<Object> deleteSegnalazione(@RequestParam("tm") String nomeTeam){
         gestoreSegnalazioni.deleteSegnalazione(getMentore(),nomeTeam);
         return new ResponseEntity<>("Segnalazione eliminata",HttpStatus.OK);
+    }
+
+    @GetMapping("/listallsegn")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Object> getListAllSegnalazioni(){
+        List<Segnalazione> resp = gestoreSegnalazioni.getListAllSegnalazioni();
+        return new ResponseEntity<>(resp.toString(),HttpStatus.OK);
+    }
+
+    @DeleteMapping("/ignora")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Object> ignoraSegnalazione(@RequestParam("sgn") Long segnalazioneId){
+        gestoreSegnalazioni.ignoraSegnalazione(segnalazioneId);
+        return new ResponseEntity<>("Segnalazione ignorata",HttpStatus.OK);
+    }
+
+    @PostMapping("/avv")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity inviaAvvertimento(@RequestParam("sgn") Long segnalazioneId, @RequestBody String messaggio){
+        messaggio = messaggio.replaceAll("\"","");
+        gestoreSegnalazioni.inviaAvvertimento(segnalazioneId,messaggio);
+        return new ResponseEntity<>("Messaggio di avvertimento inviato",HttpStatus.OK);
     }
 
 

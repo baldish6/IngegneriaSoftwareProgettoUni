@@ -41,6 +41,10 @@ public class Segnalazione {
         return messaggio;
     }
 
+    public void inviaAvvertimento(String messaggio) {
+       this.team.avverti(messaggio);
+    }
+
     @Override
     public String toString() {
         return "Segnalazione{" +

@@ -49,6 +49,11 @@ public class Team {
 
     }
 
+    public void avverti(String messaggio) {
+        String newmessaggio = "L'organizzatore ha mandato un'avvertimento : "+messaggio;
+        messaggi.add(newmessaggio);
+    }
+
     public Long getId() {
         return id;
     }
