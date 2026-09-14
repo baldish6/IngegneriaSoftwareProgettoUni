@@ -1,5 +1,6 @@
 package com.unicam.hackhub.Controller;
 
+import com.unicam.hackhub.Error.UtenteNotExistException;
 import com.unicam.hackhub.Model.*;
 import com.unicam.hackhub.Service.GestoreHackathon;
 import com.unicam.hackhub.Service.GestoreRichieste;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Collection;
 
 import static com.unicam.hackhub.Util.FileDownloadUtil.fileDownload;
@@ -53,11 +55,40 @@ public class UtentiController {
        return new ResponseEntity<>(team.toString(), HttpStatus.OK);
     }
 
+    @PostMapping("/invita")
+    @PreAuthorize("hasAuthority('UTENTE')")
+    public ResponseEntity<Object> inviaInvito(@RequestParam ("send") Long utenteId){
+        Utente utente = getUtenteId();
+        Utente utenteInvita = gestoreUtente.getUtente(utenteId);
+        if (!utenteInvita.getRuolo().equals(Ruolo.UTENTE)||utenteId.equals(utente.getId())){
+            throw new UtenteNotExistException();
+        }
+        Team team = gestoreTeam.getTeam(utente);
+        gestoreTeam.addInvito(team, utenteInvita);
+        return new ResponseEntity<>("Utente invitato",HttpStatus.OK);
+    }
+
     @GetMapping("/hackliblist")
     @PreAuthorize("hasAuthority('UTENTE')")
     public ResponseEntity<Object> listHackathonLiberi( ){
         Team team = gestoreTeam.getTeam(getUtenteId());
         return new ResponseEntity<>(gestoreHackathon.getListHackathonLiberi(team).toString(),HttpStatus.OK);
+    }
+
+
+
+    @GetMapping("/invitilist")
+    @PreAuthorize("hasAuthority('UTENTE')")
+    public ResponseEntity<Object> getListInviti( ){
+        return new ResponseEntity<>(gestoreTeam.getListInviti(getUtenteId()).toString(),HttpStatus.OK);
+    }
+
+    @PostMapping("/accept")
+    @PreAuthorize("hasAuthority('UTENTE')")
+    public ResponseEntity<Object> accettaInvito(
+            @RequestParam ("tm") String nomeTeam){
+        gestoreTeam.accettaInvito(nomeTeam, getUtenteId());
+        return new ResponseEntity<>("Invito accettato ",HttpStatus.OK);
     }
 
     @PostMapping("/hackiscrivi")
@@ -157,10 +188,12 @@ public class UtentiController {
            gestoreHackathon.teamRemoved(team);
            gestoreTeam.deleteTeam(team);
        }
-
         return new ResponseEntity<>("Team abbandonato",HttpStatus.OK);
-
     }
+
+
+
+
 
 
 

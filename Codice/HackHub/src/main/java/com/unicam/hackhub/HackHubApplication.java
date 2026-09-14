@@ -10,10 +10,10 @@ import java.util.function.Consumer;
 @SpringBootApplication
 public class HackHubApplication {
 
-    /* @Bean
+    @Bean
     public Consumer<JsonNode> fixSpringBug() {
         return value -> {};
-    }*/
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(HackHubApplication.class, args);

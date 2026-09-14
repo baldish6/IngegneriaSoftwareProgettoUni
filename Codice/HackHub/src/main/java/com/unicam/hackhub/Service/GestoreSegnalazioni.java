@@ -7,6 +7,7 @@ import com.unicam.hackhub.Model.Mentore;
 import com.unicam.hackhub.Model.Segnalazione;
 import com.unicam.hackhub.Model.Team;
 import com.unicam.hackhub.Repository.SegnalazioneRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -22,6 +23,7 @@ public class GestoreSegnalazioni {
         this.segnalazioneRepository = segnalazioneRepository;
     }
 
+    @Transactional
     public Segnalazione addSegnalazione(Team team, Mentore mentore,String messaggio) {
         if (!segnalazioneRepository.existsByTeamAndMentore(team, mentore)) {
             Segnalazione segnalazione = new Segnalazione(team,mentore,messaggio);
@@ -33,6 +35,7 @@ public class GestoreSegnalazioni {
         return segnalazioneRepository.findAllByMentore(mentore);
     }
 
+    @Transactional
     public void deleteSegnalazione(Mentore mentore,String nomeTeam) {
         segnalazioneRepository.deleteByMentoreAndTeam_Nome(mentore,nomeTeam);
     }
@@ -41,10 +44,12 @@ public class GestoreSegnalazioni {
         return segnalazioneRepository.findAll();
     }
 
+    @Transactional
     public void ignoraSegnalazione(Long segnalazioneId) {
         segnalazioneRepository.deleteById(segnalazioneId);
     }
 
+    @Transactional
     public void inviaAvvertimento(Long segnalazioneId, String messaggio) {
         segnalazioneRepository
                 .findById(segnalazioneId)
@@ -52,6 +57,7 @@ public class GestoreSegnalazioni {
                 .inviaAvvertimento(messaggio);
     }
 
+    @Transactional
     public Set<MembroTeam> sospendiTeam(Long segnalazioneId) {
         return segnalazioneRepository
                 .findById(segnalazioneId)

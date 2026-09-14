@@ -67,6 +67,14 @@ public class Team {
         messaggi.add(messaggio);
     }
 
+    public void update(Utente utente,String messaggio) {
+        if (utente!=null){
+           this.addMembroTeam(utente);
+        }
+        messaggi.add(messaggio);
+
+    }
+
     public void quitTeam(MembroTeam membroTeam) {
         membroTeams.remove(membroTeam);
     }
@@ -106,4 +114,6 @@ public class Team {
     public List<String> getMessaggi() {
         return messaggi;
     }
+
+
 }

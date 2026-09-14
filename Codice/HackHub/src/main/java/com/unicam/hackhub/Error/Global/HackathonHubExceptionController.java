@@ -116,6 +116,18 @@ public class HackathonHubExceptionController {
         return new ResponseEntity<>(  "c'è stato un problema con il sistema di pagamento", HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = UtenteInvitatoException.class)
+    public ResponseEntity<Object> UtenteAlreadyInvitato(  UtenteInvitatoException exception){
+        return new ResponseEntity<>(  "La tua squadra ha già mandato un invito a questo utente", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = InvitoNotExistException.class)
+    public ResponseEntity<Object> InvitoNotPresent(  InvitoNotExistException exception){
+        return new ResponseEntity<>(  "non esiste l'invito nel db", HttpStatus.NOT_FOUND);
+    }
+
+
+
 
 
 

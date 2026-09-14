@@ -41,6 +41,8 @@ public class Richiesta {
         return messaggio;
     }
 
+
+
     @Override
     public String toString() {
         return "Richiesta{" +

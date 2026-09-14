@@ -56,6 +56,10 @@ public class Utente implements UserDetails {
         return this.nome;
     }
 
+    public Ruolo getRuolo() {
+        return ruolo;
+    }
+
     @Override
     public String toString() {
         return "Utente{" +

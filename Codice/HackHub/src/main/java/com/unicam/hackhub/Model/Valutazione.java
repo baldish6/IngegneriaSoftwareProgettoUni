@@ -59,6 +59,8 @@ public class Valutazione {
         team.giveResult(this,hackathon);
     }
 
+
+
     @Override
     public String toString() {
         return "Valutazione{" +

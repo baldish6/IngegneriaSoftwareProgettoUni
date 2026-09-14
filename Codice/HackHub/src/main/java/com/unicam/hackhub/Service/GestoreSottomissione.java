@@ -111,6 +111,7 @@ public class GestoreSottomissione {
         }
     }
 
+    @Transactional
     public void deleteSottomissione(Team team, Hackathon hackathon){
         Optional<Sottomissione> resp = sottomissioneRepository.findByTeamAndHackathon(team,hackathon);
         if (resp.isPresent()) {

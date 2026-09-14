@@ -8,7 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Collection;
 
 public interface RichiestaRepository extends JpaRepository<Richiesta,Long> {
-    Boolean existByTeamAndMentore(Team team, Mentore mentore);
+    Boolean existsByTeamAndMentore(Team team, Mentore mentore);
     Collection<Richiesta> findAllByMentore(Mentore mentore);
     void deleteAllByTeam(Team team);
+
 }

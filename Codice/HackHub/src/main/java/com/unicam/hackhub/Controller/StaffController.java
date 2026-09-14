@@ -244,7 +244,6 @@ public class StaffController {
        Team team = gestoreTeam.getTeam(nomeTeam);
        gestoreHackathon.declareWinner(hackathonId,team);
        return new ResponseEntity<>("Vincitore aggiunto",HttpStatus.OK);
-
     }
 
 

@@ -28,7 +28,8 @@ public class Hackathon {
     private String luogo;
     private Float premio;
     private Integer maxTeam;
-    private Team winnerTeam;
+    @OneToOne
+    private Team winnerTeam=null;
 
     @OneToOne(cascade = CascadeType.REMOVE)
     private Giudice giudice;
@@ -137,6 +138,10 @@ public class Hackathon {
         return listTeams;
     }
 
+    public Team getWinnerTeam() {
+        return winnerTeam;
+    }
+
     /*
     @Override
     public boolean equals(Object o) {
@@ -149,6 +154,8 @@ public class Hackathon {
     public int hashCode() {
         return Objects.hash(id, name, regolamento, dataScadenzaIscrizione, dataInizio, dataFine, luogo, premio, maxTeam, giudice);
     }*/
+
+
 
     @Override
     public String toString() {

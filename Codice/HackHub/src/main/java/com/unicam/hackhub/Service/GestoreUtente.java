@@ -76,6 +76,7 @@ public class GestoreUtente {
         return user;
     }
 
+    @Transactional
     public Mentore addMentore(UserInfo input){
         Mentore mentore = new Mentore(
                 input.nome(),
@@ -84,6 +85,7 @@ public class GestoreUtente {
         return utenteRepository.save(mentore);
     }
 
+    @Transactional
     public Giudice addGiudice(UserInfo input){
         Giudice giudice = new Giudice(
                 input.nome(),
@@ -129,6 +131,7 @@ public class GestoreUtente {
         else throw new UtenteNotExistException();
     }
 
+    @Transactional
     public void deleteUtente(Utente utente) {
         utenteRepository.delete(utente);
 

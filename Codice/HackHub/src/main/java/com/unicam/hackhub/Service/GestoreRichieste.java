@@ -25,7 +25,10 @@ public class GestoreRichieste {
 
     @Transactional
     public Richiesta addRichiesta(Team team, Mentore mentore,String messaggio){
-        if (richiestaRepository.existByTeamAndMentore(team,mentore)){
+
+
+
+        if (richiestaRepository.existsByTeamAndMentore(team,mentore)){
             throw new RichiestaExistException();
         }
         Richiesta richiesta = new Richiesta(team,mentore,messaggio);
@@ -36,6 +39,7 @@ public class GestoreRichieste {
         return richiestaRepository.findAllByMentore(mentore);
     }
 
+    @Transactional
     public void propostaCall(Long richiestaId, LocalDate date,Mentore mentore){
 
         Richiesta richiesta = richiestaRepository.findById(richiestaId).orElseThrow(RichiestaNotExistException::new);
@@ -47,6 +51,7 @@ public class GestoreRichieste {
         richiestaRepository.deleteById(richiestaId);
     }
 
+    @Transactional
     public void teamRemoved(Team team){
         richiestaRepository.deleteAllByTeam(team);
     }

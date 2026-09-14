@@ -13,16 +13,20 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class GestoreTeam {
 
     private TeamRepository teamRepository;
     private MembroTeamRepository membroTeamRepository;
+    private GestoreInviti gestoreInviti;
 
-    public GestoreTeam(TeamRepository teamRepository,MembroTeamRepository membroTeamRepository) {
+    public GestoreTeam(TeamRepository teamRepository,
+                       MembroTeamRepository membroTeamRepository, GestoreInviti gestoreInviti) {
         this.teamRepository = teamRepository;
         this.membroTeamRepository = membroTeamRepository;
+        this.gestoreInviti = gestoreInviti;
     }
 
     @Transactional
@@ -58,6 +62,7 @@ public class GestoreTeam {
         return getTeam(utente).getMessaggi();
     }
 
+    @Transactional
     public Team quitTeam(Utente utente) {
 
         MembroTeam membroTeam = membroTeamRepository
@@ -71,9 +76,23 @@ public class GestoreTeam {
         return team;
     }
 
+    @Transactional
     public void deleteTeam(Team team) {
         teamRepository.delete(team);
+    }
 
+    @Transactional
+    public void addInvito(Team team, Utente utente) {
+        gestoreInviti.addInvito(team, utente);
+    }
+
+    public Set<Team> getListInviti(Utente utente) {
+        return gestoreInviti.getListInviti(utente);
+    }
+
+    public void accettaInvito(String nomeTeam, Utente utente) {
+        Team team = teamRepository.findByNome(nomeTeam).orElseThrow(TeamNotExistException::new);
+        gestoreInviti.accettaInvito(team, utente);
     }
 
 

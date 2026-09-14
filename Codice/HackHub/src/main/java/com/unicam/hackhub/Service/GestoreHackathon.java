@@ -169,10 +169,12 @@ public class GestoreHackathon {
         return Boolean.TRUE;
     }
 
+    @Transactional
     public void deleteSottomissione(Long hackathonId,Team team){
         Hackathon hackathon = hackathonRepository.findById(hackathonId).orElseThrow(HackathonNotExistException::new);
         gestoreSottomissione.deleteSottomissione(team,hackathon);
     }
+
 
     public Sottomissione getSottomissione(Long hackathonId,Team team){
         Hackathon hackathon = hackathonRepository.findById(hackathonId).orElseThrow(HackathonNotExistException::new);
@@ -184,6 +186,7 @@ public class GestoreHackathon {
         return gestoreValutazioni.getListaValutazioni(hackathon);
     }
 
+    @Transactional
     public void teamRemoved(Team team){
         team.getHackathonsIscritti().forEach(x->{
             x.teamRemoved(team);
@@ -192,6 +195,7 @@ public class GestoreHackathon {
         });
     }
 
+    @Transactional
     public void declareWinner(Long hackathonId,Team team){
         Hackathon hackathon = hackathonRepository.findById(hackathonId).orElseThrow(HackathonNotExistException::new);
         hackathon.declareWinner(team);

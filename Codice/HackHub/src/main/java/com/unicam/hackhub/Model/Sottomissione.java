@@ -60,12 +60,16 @@ public class Sottomissione {
         inviaGiudice = true;
     }
 
+    public Boolean getInviaGiudice() {
+        return inviaGiudice;
+    }
+
     @Override
     public String toString() {
         return "Sottomissione{" +
                 "id=" + id +
                 ", team=" + team +
-                ", hackathon=" + hackathon +
+               // ", hackathon=" + hackathon +
                 ", filePath='" + filePath + '\'' +
                 ", inviaGiudice=" + inviaGiudice +
                 '}';

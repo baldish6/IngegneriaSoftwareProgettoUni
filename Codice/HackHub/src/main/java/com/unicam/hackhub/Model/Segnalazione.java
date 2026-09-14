@@ -51,6 +51,8 @@ public class Segnalazione {
         return team.sospendi();
     }
 
+
+
     @Override
     public String toString() {
         return "Segnalazione{" +
