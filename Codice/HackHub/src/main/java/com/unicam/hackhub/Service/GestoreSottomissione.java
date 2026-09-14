@@ -111,6 +111,16 @@ public class GestoreSottomissione {
         }
     }
 
+    public void deleteSottomissione(Team team, Hackathon hackathon){
+        Optional<Sottomissione> resp = sottomissioneRepository.deleteByTeamAndHackathon(team,hackathon);
+        if (resp.isPresent()) {
+            delete( resp.get().getFilePath() );
+        }
+        else {
+            throw new SottNotExistException();
+        }
+    }
+
 
 
 

@@ -113,6 +113,16 @@ public class UtentiController {
         return new ResponseEntity<>(gestoreTeam.getMessaggi(getUtenteId()).toString(),HttpStatus.OK);
     }
 
+    @DeleteMapping("/delsott")
+    @PreAuthorize("hasAuthority('UTENTE')")
+    public ResponseEntity<Object> deleteSottomissione( @RequestParam ("hck") Long hackathonId){
+
+        gestoreHackathon.deleteSottomissione(hackathonId,gestoreTeam.getTeam(getUtenteId()));
+        return new ResponseEntity<>("Sottomissione eliminata",HttpStatus.OK);
+
+
+    }
+
 
 
 

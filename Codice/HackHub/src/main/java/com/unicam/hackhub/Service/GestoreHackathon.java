@@ -167,5 +167,10 @@ public class GestoreHackathon {
         return Boolean.TRUE;
     }
 
+    public void deleteSottomissione(Long hackathonId,Team team){
+        Hackathon hackathon = hackathonRepository.findById(hackathonId).orElseThrow(HackathonNotExistException::new);
+        gestoreSottomissione.deleteSottomissione(team,hackathon);
+    }
+
 
 }
