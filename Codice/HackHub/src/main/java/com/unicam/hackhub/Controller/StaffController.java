@@ -18,6 +18,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.Objects;
 
 import static com.unicam.hackhub.Util.FileDownloadUtil.fileDownload;
@@ -173,12 +174,25 @@ public class StaffController {
     public ResponseEntity<Object> segnala(@RequestParam("tm") String nomeTeam,
                                           @RequestBody String messaggio
     ){
-
         messaggio = messaggio.replaceAll("\"","");
         Segnalazione resp = gestoreSegnalazioni.addSegnalazione(gestoreTeam.getTeam(nomeTeam),getMentore(),messaggio);
         return new ResponseEntity<>(resp.toString(),HttpStatus.OK);
-
     }
+
+    @GetMapping("/listsegn")
+    @PreAuthorize("hasAuthority('MENTORE')")
+    public ResponseEntity<Object> getListSegnalazioni(){
+        Collection<Segnalazione> resp = gestoreSegnalazioni.getListeSegnalazioni(getMentore());
+        return new ResponseEntity<>(resp.toString(),HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delsegn")
+    @PreAuthorize("hasAuthority('MENTORE')")
+    public ResponseEntity<Object> deleteSegnalazione(@RequestParam("tm") String nomeTeam){
+        gestoreSegnalazioni.deleteSegnalazione(getMentore(),nomeTeam);
+        return new ResponseEntity<>("Segnalazione eliminata",HttpStatus.OK);
+    }
+
 
 
 

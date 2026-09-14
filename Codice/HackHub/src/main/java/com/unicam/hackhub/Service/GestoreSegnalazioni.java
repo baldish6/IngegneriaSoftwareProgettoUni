@@ -7,6 +7,8 @@ import com.unicam.hackhub.Model.Team;
 import com.unicam.hackhub.Repository.SegnalazioneRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @Service
 public class GestoreSegnalazioni {
 
@@ -21,7 +23,14 @@ public class GestoreSegnalazioni {
             Segnalazione segnalazione = new Segnalazione(team,mentore,messaggio);
             return segnalazioneRepository.save(segnalazione);
         }else throw new SegnalazioneExistException();
+    }
 
+    public Collection<Segnalazione> getListeSegnalazioni(Mentore mentore) {
+        return segnalazioneRepository.findAllByMentore(mentore);
+    }
+
+    public void deleteSegnalazione(Mentore mentore,String nomeTeam) {
+        segnalazioneRepository.deleteByMentoreAndTeam_Nome(mentore,nomeTeam);
 
     }
 }
