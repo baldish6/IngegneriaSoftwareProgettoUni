@@ -161,5 +161,11 @@ public class GestoreHackathon {
        return gestoreValutazioni.addValutazione(valutazione,sottomissione);
     }
 
+    public Boolean isActive(Team team,Mentore mentore){
+        // check if team in mentore
+        // check if hackathon active
+        return Boolean.TRUE;
+    }
+
 
 }

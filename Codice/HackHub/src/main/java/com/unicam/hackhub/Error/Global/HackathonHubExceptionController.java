@@ -70,6 +70,11 @@ public class HackathonHubExceptionController {
         return new ResponseEntity<>(  "Sei già in un team", HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = RichiestaExistException.class)
+    public ResponseEntity<Object> RichiestaSent(  RichiestaExistException exception){
+        return new ResponseEntity<>(  "Richiesta già inviata al mentore", HttpStatus.NOT_FOUND);
+    }
+
 
 
 

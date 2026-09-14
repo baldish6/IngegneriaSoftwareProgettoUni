@@ -2,6 +2,7 @@ package com.unicam.hackhub.Controller;
 
 import com.unicam.hackhub.Model.*;
 import com.unicam.hackhub.Service.GestoreHackathon;
+import com.unicam.hackhub.Service.GestoreRichieste;
 import com.unicam.hackhub.Service.GestoreTeam;
 import com.unicam.hackhub.Service.GestoreUtente;
 import org.springframework.http.HttpStatus;
@@ -22,11 +23,13 @@ public class UtentiController {
     private final GestoreTeam gestoreTeam;
     private final GestoreUtente gestoreUtente;
     private final GestoreHackathon gestoreHackathon;
+    private final GestoreRichieste gestoreRichieste;
 
-    public UtentiController(GestoreTeam  gestoreTeam, GestoreUtente gestoreUtente, GestoreHackathon gestoreHackathon) {
+    public UtentiController(GestoreTeam  gestoreTeam, GestoreUtente gestoreUtente, GestoreHackathon gestoreHackathon, GestoreRichieste gestoreRichieste) {
         this.gestoreTeam = gestoreTeam;
         this.gestoreUtente = gestoreUtente;
         this.gestoreHackathon = gestoreHackathon;
+        this.gestoreRichieste = gestoreRichieste;
     }
 
     private Utente getUtenteId(){
@@ -87,6 +90,24 @@ public class UtentiController {
         gestoreHackathon.inviaGiudice(sottId);
         return new ResponseEntity<>("Sottomissione inviata",HttpStatus.OK);
     }
+
+    @PostMapping("/invrich")
+    @PreAuthorize("hasAuthority('UTENTE')")
+    public ResponseEntity<Object> inviaRichiesta(
+            @RequestParam("mnt") String mentoreName,
+            @RequestBody String messaggio
+    ){
+        messaggio = messaggio.replaceAll("\"","");
+
+        Team team = gestoreTeam.getTeam(getUtenteId());
+        Mentore mentore = (Mentore) gestoreUtente.getUtente(mentoreName,Ruolo.MENTORE);
+
+        Richiesta resp = gestoreRichieste.addRichiesta(team,mentore,messaggio);
+
+        return new ResponseEntity<>(resp,HttpStatus.OK);
+    }
+
+
 
 
 

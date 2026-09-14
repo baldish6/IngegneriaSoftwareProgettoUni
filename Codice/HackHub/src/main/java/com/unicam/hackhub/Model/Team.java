@@ -16,6 +16,8 @@ public class Team {
     @ManyToMany
     private Set<Hackathon>  hackathonsIscritti = new HashSet<>();
 
+   
+
     public Team( String nome) {
         this.nome = nome;
        // MembroTeam  membroTeam = new MembroTeam(utente,this);
@@ -57,9 +59,6 @@ public class Team {
     public Set<Hackathon> getHackathonsIscritti() {
         return hackathonsIscritti;
     }
-
-
-
 
 
 }

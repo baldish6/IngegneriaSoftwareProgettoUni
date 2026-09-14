@@ -113,9 +113,10 @@ public class GestoreUtente {
         else throw new UtenteNotExistException();
         */
       return utenteRepository.findById(id).orElseThrow(UtenteNotExistException::new);
+    }
 
-
-
+    public Utente getUtente(String nome,Ruolo ruolo) {
+        return utenteRepository.findByNomeAndRuolo(nome,ruolo).orElseThrow(UtenteNotExistException::new);
     }
 
 }
