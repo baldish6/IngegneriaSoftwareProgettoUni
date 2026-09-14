@@ -127,7 +127,7 @@ public class UtentiController {
     @GetMapping("/sott")
     @PreAuthorize("hasAuthority('UTENTE')")
     public ResponseEntity<Object> getSottomissione(@RequestParam ("hck") Long hackathonId) throws FileNotFoundException {
-        
+
         Sottomissione sottomissione = gestoreHackathon.getSottomissione(hackathonId,gestoreTeam.getTeam(getUtenteId()));
 
         if (sottomissione!=null){
@@ -139,6 +139,13 @@ public class UtentiController {
                     HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+    @DeleteMapping
+    @PreAuthorize("hasAuthority('UTENTE')")
+    public ResponseEntity<Object> deleteAccount(){
+        gestoreUtente.deleteUtente(getUtenteId().getId());
+        return new ResponseEntity<>("Account Eliminato",HttpStatus.OK);
     }
 
 

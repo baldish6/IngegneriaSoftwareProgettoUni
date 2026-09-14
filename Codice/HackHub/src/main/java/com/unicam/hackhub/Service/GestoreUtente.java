@@ -119,4 +119,12 @@ public class GestoreUtente {
         return utenteRepository.findByNomeAndRuolo(nome,ruolo).orElseThrow(UtenteNotExistException::new);
     }
 
+    @Transactional
+    public void  deleteUtente(Long id) {
+        if (utenteRepository.existsById(id)) {
+            utenteRepository.deleteById(id);
+        }
+        else throw new UtenteNotExistException();
+    }
+
 }

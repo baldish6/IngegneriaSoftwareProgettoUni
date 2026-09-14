@@ -3,9 +3,7 @@ package com.unicam.hackhub.Controller;
 import com.unicam.hackhub.Model.*;
 import com.unicam.hackhub.Service.GestoreHackathon;
 import com.unicam.hackhub.Service.GestoreUtente;
-import com.unicam.hackhub.Util.HackathonInfo;
-import com.unicam.hackhub.Util.UserInfo;
-import com.unicam.hackhub.Util.ValutazioneInfo;
+import com.unicam.hackhub.Util.*;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 import static com.unicam.hackhub.Util.FileDownloadUtil.fileDownload;
 
@@ -29,6 +30,7 @@ public class StaffController {
 
     private final GestoreUtente gestoreUtente;
     private final GestoreHackathon gestoreHackathon;
+    private ITempo tempo = Tempo.getInstance();
 
     public StaffController(GestoreUtente gestoreUtente, GestoreHackathon gestoreHackathon) {
         this.gestoreUtente = gestoreUtente;
@@ -119,6 +121,24 @@ public class StaffController {
         }
     }
 
+    @GetMapping("/time")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Object> getTime(){
+        return new ResponseEntity<>(tempo.getTime(),HttpStatus.OK);
+    }
+
+    @PostMapping("/newtime")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Object> changeTime(
+            @RequestParam ("time") String nuovaData
+
+    ){
+        DateTimeFormatter dateformatter
+                = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate newDate = Objects.requireNonNull(LocalDate.parse(nuovaData,dateformatter));
+        tempo.changeTime(newDate);
+        return new ResponseEntity<>("La nuova data è : "+tempo.getTime(),HttpStatus.OK);
+    }
 
 
 
