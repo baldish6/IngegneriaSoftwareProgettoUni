@@ -86,6 +86,21 @@ public class HackathonHubExceptionController {
                 HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = TeamNotExistException.class)
+    public ResponseEntity<Object> TeamNotFound(  TeamNotExistException exception){
+        return new ResponseEntity<>(  "Il team non è nel database", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = SegnalazioneExistException.class)
+    public ResponseEntity<Object> SegnExist(  SegnalazioneExistException exception){
+        return new ResponseEntity<>(  "Il team è ià stato segnalato", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = SegnalazioneNotExistException.class)
+    public ResponseEntity<Object> SegnNotExist(  SegnalazioneNotExistException exception){
+        return new ResponseEntity<>(  "La segnalazione non è nel database", HttpStatus.NOT_FOUND);
+    }
+
 
 
 

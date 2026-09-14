@@ -2,6 +2,7 @@ package com.unicam.hackhub.Service;
 
 import com.unicam.hackhub.Error.NotInTeamException;
 import com.unicam.hackhub.Error.TeamNomeExistException;
+import com.unicam.hackhub.Error.TeamNotExistException;
 import com.unicam.hackhub.Error.UtenteHaveTeamException;
 import com.unicam.hackhub.Model.Team;
 import com.unicam.hackhub.Model.Utente;
@@ -46,6 +47,10 @@ public class GestoreTeam {
                 .findByUtente(utente)
                 .orElseThrow(NotInTeamException::new)
                 .getTeam();
+    }
+
+    public Team getTeam(String teamName) {
+        return teamRepository.findByNome(teamName).orElseThrow(TeamNotExistException::new);
     }
 
     public List<String> getMessaggi(Utente utente) {

@@ -1,9 +1,7 @@
 package com.unicam.hackhub.Controller;
 
 import com.unicam.hackhub.Model.*;
-import com.unicam.hackhub.Service.GestoreHackathon;
-import com.unicam.hackhub.Service.GestoreRichieste;
-import com.unicam.hackhub.Service.GestoreUtente;
+import com.unicam.hackhub.Service.*;
 import com.unicam.hackhub.Util.*;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -33,12 +31,18 @@ public class StaffController {
     private final GestoreUtente gestoreUtente;
     private final GestoreHackathon gestoreHackathon;
     private final GestoreRichieste gestoreRichieste;
+    private final GestoreSegnalazioni gestoreSegnalazioni;
+    private GestoreTeam gestoreTeam;
     private ITempo tempo = Tempo.getInstance();
 
-    public StaffController(GestoreUtente gestoreUtente, GestoreHackathon gestoreHackathon, GestoreRichieste gestoreRichieste) {
+    public StaffController(GestoreUtente gestoreUtente, GestoreHackathon gestoreHackathon,
+                           GestoreRichieste gestoreRichieste, GestoreSegnalazioni gestoreSegnalazioni,
+                           GestoreTeam gestoreTeam) {
         this.gestoreUtente = gestoreUtente;
         this.gestoreHackathon = gestoreHackathon;
         this.gestoreRichieste = gestoreRichieste;
+        this.gestoreSegnalazioni = gestoreSegnalazioni;
+        this.gestoreTeam = gestoreTeam;
     }
 
     private Authentication getAuthentication() {
@@ -162,6 +166,18 @@ public class StaffController {
     ){
         gestoreRichieste.propostaCall(richiestaId,GetDateFromString.getLocalDate(data),getMentore());
         return new ResponseEntity<>("Appuntamento con team prenotato",HttpStatus.OK);
+    }
+
+    @PostMapping("/segnala")
+    @PreAuthorize("hasAuthority('MENTORE')")
+    public ResponseEntity<Object> segnala(@RequestParam("tm") String nomeTeam,
+                                          @RequestBody String messaggio
+    ){
+
+        messaggio = messaggio.replaceAll("\"","");
+        Segnalazione resp = gestoreSegnalazioni.addSegnalazione(gestoreTeam.getTeam(nomeTeam),getMentore(),messaggio);
+        return new ResponseEntity<>(resp.toString(),HttpStatus.OK);
+
     }
 
 
