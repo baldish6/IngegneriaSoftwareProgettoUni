@@ -10,6 +10,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import static com.unicam.hackhub.Util.GetDateFromString.getLocalDate;
+
 @Entity
 public class Hackathon {
 
@@ -39,12 +41,11 @@ public class Hackathon {
         this.name = name;
         this.regolamento = regolamento;
 
-        DateTimeFormatter dateformatter
-                = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        this.dataScadenzaIscrizione =  Objects.requireNonNull(LocalDate.parse(dataScadenzaIscrizione,dateformatter));
-        this.dataInizio = Objects.requireNonNull(LocalDate.parse(dataInizio,dateformatter));
-        this.dataFine = Objects.requireNonNull(LocalDate.parse(dataFine,dateformatter));
+
+        this.dataScadenzaIscrizione =  getLocalDate(dataScadenzaIscrizione);
+        this.dataInizio = getLocalDate(dataInizio);
+        this.dataFine = getLocalDate(dataFine);
 
         this.luogo = luogo;
         this.premio = premio;

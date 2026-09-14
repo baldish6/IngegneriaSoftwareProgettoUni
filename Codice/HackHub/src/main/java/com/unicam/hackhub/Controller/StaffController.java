@@ -2,6 +2,7 @@ package com.unicam.hackhub.Controller;
 
 import com.unicam.hackhub.Model.*;
 import com.unicam.hackhub.Service.GestoreHackathon;
+import com.unicam.hackhub.Service.GestoreRichieste;
 import com.unicam.hackhub.Service.GestoreUtente;
 import com.unicam.hackhub.Util.*;
 import org.springframework.core.io.InputStreamResource;
@@ -22,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import static com.unicam.hackhub.Util.FileDownloadUtil.fileDownload;
+import static com.unicam.hackhub.Util.GetDateFromString.getLocalDate;
 
 
 @RestController
@@ -30,11 +32,13 @@ public class StaffController {
 
     private final GestoreUtente gestoreUtente;
     private final GestoreHackathon gestoreHackathon;
+    private final GestoreRichieste gestoreRichieste;
     private ITempo tempo = Tempo.getInstance();
 
-    public StaffController(GestoreUtente gestoreUtente, GestoreHackathon gestoreHackathon) {
+    public StaffController(GestoreUtente gestoreUtente, GestoreHackathon gestoreHackathon, GestoreRichieste gestoreRichieste) {
         this.gestoreUtente = gestoreUtente;
         this.gestoreHackathon = gestoreHackathon;
+        this.gestoreRichieste = gestoreRichieste;
     }
 
     private Authentication getAuthentication() {
@@ -133,9 +137,7 @@ public class StaffController {
             @RequestParam ("time") String nuovaData
 
     ){
-        DateTimeFormatter dateformatter
-                = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate newDate = Objects.requireNonNull(LocalDate.parse(nuovaData,dateformatter));
+        LocalDate newDate = getLocalDate(nuovaData);
         tempo.changeTime(newDate);
         return new ResponseEntity<>("La nuova data è : "+tempo.getTime(),HttpStatus.OK);
     }
@@ -145,6 +147,24 @@ public class StaffController {
     public ResponseEntity<Object> getListaValutazioni(){
         return new ResponseEntity<>(gestoreHackathon.getListaValutazioni(getGiudice()),HttpStatus.OK);
     }
+
+    @GetMapping("/listrich")
+    @PreAuthorize("hasAuthority('MENTORE')")
+    public ResponseEntity<Object> getListRichieste(){
+        return new ResponseEntity<>(gestoreRichieste.getListRichieste(getMentore()),HttpStatus.OK);
+    }
+
+    @PostMapping("/resprich")
+    @PreAuthorize("hasAuthority('MENTORE')")
+    public ResponseEntity<Object> propostaCall(
+            @RequestParam ("rcst") Long richiestaId,
+            @RequestParam ("time") String data
+    ){
+        gestoreRichieste.propostaCall(richiestaId,GetDateFromString.getLocalDate(data),getMentore());
+        return new ResponseEntity<>("Appuntamento con team prenotato",HttpStatus.OK);
+    }
+
+
 
 
 

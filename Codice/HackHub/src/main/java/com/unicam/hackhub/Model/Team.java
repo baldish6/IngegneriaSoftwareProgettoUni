@@ -2,6 +2,8 @@ package com.unicam.hackhub.Model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Entity
@@ -34,6 +36,17 @@ public class Team {
 
     public void addHackathonIscritti(Hackathon hackathon) {
         this.hackathonsIscritti.add(hackathon);
+    }
+
+    public void messageCall(Mentore mentore, LocalDate date) {
+        DateTimeFormatter dateformatter
+                = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        String messagio = "Il mentore "+ mentore.getNome() + "con id "+ mentore.getId()+
+                " ha creato un incontro il giorno "+ date.format(dateformatter);
+
+        messaggi.add(messagio);
+
     }
 
     public Long getId() {

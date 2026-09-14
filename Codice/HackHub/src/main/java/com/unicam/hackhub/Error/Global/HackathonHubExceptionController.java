@@ -75,6 +75,17 @@ public class HackathonHubExceptionController {
         return new ResponseEntity<>(  "Richiesta già inviata al mentore", HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = RichiestaNotExistException.class)
+    public ResponseEntity<Object> RichiestaNotFound(  RichiestaNotExistException exception){
+        return new ResponseEntity<>(  "Richiesta non trovata nel db", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = RichiestaNotPrenotataException.class)
+    public ResponseEntity<Object> RichiestaNotPrenotata(  RichiestaNotPrenotataException exception){
+        return new ResponseEntity<>(  "Impossibile prenotare la richiesta con il servizio esterno",
+                HttpStatus.NOT_FOUND);
+    }
+
 
 
 
