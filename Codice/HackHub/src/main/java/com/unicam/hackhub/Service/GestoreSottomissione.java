@@ -121,6 +121,10 @@ public class GestoreSottomissione {
         }
     }
 
+    public Sottomissione getSottomissione(Team team, Hackathon hackathon){
+        return sottomissioneRepository.findByTeamAndHackathon(team,hackathon).orElseThrow(SottNotExistException::new);
+    }
+
 
 
 

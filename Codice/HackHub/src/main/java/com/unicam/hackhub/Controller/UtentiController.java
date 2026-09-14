@@ -14,7 +14,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.util.Collection;
+
+import static com.unicam.hackhub.Util.FileDownloadUtil.fileDownload;
 
 @RestController
 @RequestMapping("/usr")
@@ -119,7 +122,22 @@ public class UtentiController {
 
         gestoreHackathon.deleteSottomissione(hackathonId,gestoreTeam.getTeam(getUtenteId()));
         return new ResponseEntity<>("Sottomissione eliminata",HttpStatus.OK);
+    }
 
+    @GetMapping("/sott")
+    @PreAuthorize("hasAuthority('UTENTE')")
+    public ResponseEntity<Object> getSottomissione(@RequestParam ("hck") Long hackathonId) throws FileNotFoundException {
+        
+        Sottomissione sottomissione = gestoreHackathon.getSottomissione(hackathonId,gestoreTeam.getTeam(getUtenteId()));
+
+        if (sottomissione!=null){
+            return fileDownload(sottomissione.getFilePath());
+        }
+        else {
+            return new ResponseEntity<>(
+                    "Sottomissione del team richiesto per quell'hackathon non c'è nel database",
+                    HttpStatus.BAD_REQUEST);
+        }
 
     }
 

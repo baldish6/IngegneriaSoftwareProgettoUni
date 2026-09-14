@@ -172,5 +172,10 @@ public class GestoreHackathon {
         gestoreSottomissione.deleteSottomissione(team,hackathon);
     }
 
+    public Sottomissione getSottomissione(Long hackathonId,Team team){
+        Hackathon hackathon = hackathonRepository.findById(hackathonId).orElseThrow(HackathonNotExistException::new);
+        return  gestoreSottomissione.getSottomissione(team,hackathon);
+    }
+
 
 }
