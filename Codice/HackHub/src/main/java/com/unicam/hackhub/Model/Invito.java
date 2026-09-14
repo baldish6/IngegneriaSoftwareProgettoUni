@@ -14,7 +14,7 @@ public class Invito {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @ManyToMany
     private Set<Team> listTeams = new HashSet<>();
 
     @ManyToOne

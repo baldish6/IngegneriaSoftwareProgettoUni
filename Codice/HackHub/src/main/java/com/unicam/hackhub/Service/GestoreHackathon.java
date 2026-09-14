@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.management.OperationsException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,7 +64,7 @@ public class GestoreHackathon {
     }
 
     @Transactional
-    public Boolean addMentore(Mentore mentore, Long hackathonId){
+    public Boolean addMentore(Mentore mentore, Long hackathonId) throws OperationsException {
 
         /*
 
@@ -93,7 +94,7 @@ public class GestoreHackathon {
     }
 
     @Transactional
-    public Hackathon iscriviHackathon(Long hackathonId,Team team){
+    public Hackathon iscriviHackathon(Long hackathonId,Team team) throws OperationsException {
         /*if (hackathonRepository.containsKey(hackathonId)){
             Hackathon hackathon = hackathonRepository.get(hackathonId);
             hackathon.iscriviHackathon(team);
@@ -198,7 +199,7 @@ public class GestoreHackathon {
     }
 
     @Transactional
-    public void declareWinner(Long hackathonId,Team team){
+    public void declareWinner(Long hackathonId,Team team) throws OperationsException {
         Hackathon hackathon = hackathonRepository.findById(hackathonId).orElseThrow(HackathonNotExistException::new);
         hackathon.declareWinner(team);
         Float premio = hackathon.getPremio();

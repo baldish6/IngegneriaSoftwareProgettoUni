@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.OperationsException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -91,7 +92,7 @@ public class StaffController {
     @PostMapping("/addmentore")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> addMentore(
-            @RequestParam ("hck") Long hackathonId , @RequestBody UserInfo mentore) {
+            @RequestParam ("hck") Long hackathonId , @RequestBody UserInfo mentore) throws OperationsException {
         Mentore mentore1 =  gestoreUtente.addMentore(mentore);
         Boolean resp = gestoreHackathon.addMentore(mentore1, hackathonId);
         if (resp == null) {
@@ -250,8 +251,7 @@ public class StaffController {
     @PostMapping("/win")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> declareWinner(@RequestParam("sgn") Long hackathonId,
-                                                @RequestParam("tm") String nomeTeam)
-    {
+                                                @RequestParam("tm") String nomeTeam) throws OperationsException {
        Team team = gestoreTeam.getTeam(nomeTeam);
        gestoreHackathon.declareWinner(hackathonId,team);
        return new ResponseEntity<>("Vincitore aggiunto",HttpStatus.OK);

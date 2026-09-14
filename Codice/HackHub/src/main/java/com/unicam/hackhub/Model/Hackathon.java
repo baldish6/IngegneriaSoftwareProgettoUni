@@ -7,6 +7,7 @@ import com.unicam.hackhub.Error.WinnerExistException;
 import com.unicam.hackhub.Util.*;
 import jakarta.persistence.*;
 
+import javax.management.OperationsException;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -60,11 +61,16 @@ public class Hackathon implements ITimeListener {
 
     public Hackathon() {}
 
-    public Boolean addMentore(Mentore mentore){
-        return listMentori.add(mentore);
+    public Boolean changeMentoreList(Mentore mentore) {
+       return listMentori.add(mentore);
+
     }
 
-    public void iscriviHackathon(Team team){
+    public Boolean addMentore(Mentore mentore) throws OperationsException {
+        return stato.addMentore(mentore);
+    }
+
+    public void addTeam(Team team) {
         if(listTeams.contains(team)){
             throw new TeamIscrittoException();
         }
@@ -72,13 +78,23 @@ public class Hackathon implements ITimeListener {
             throw new TeamDimensionException();
         }
         listTeams.add(team);
+
+    }
+
+    public void iscriviHackathon(Team team) throws OperationsException {
+        stato.iscriviHackathon(team);
     }
 
     public void teamRemoved(Team team){
         listTeams.remove(team);
     }
 
-    public void declareWinner(Team team){
+    public void declareWinner(Team team) throws OperationsException {
+        stato.declareWinner(team);
+
+    }
+
+    public void addWinner(Team team){
         if (!listTeams.contains(team)){
             throw new TeamNotIscrittoException();
         }
@@ -87,6 +103,18 @@ public class Hackathon implements ITimeListener {
         }
         winnerTeam = team;
         changeState(new Concluso(this));
+    }
+
+    public Boolean canGiveValutazione() throws OperationsException {
+        return  stato.canGiveValutazione();
+    }
+
+    public Boolean canChangeSottomissione() throws OperationsException {
+        return  stato.canChangeSottomissione();
+    }
+
+    public Boolean isActive() throws OperationsException {
+        return stato.isActive();
     }
 
 

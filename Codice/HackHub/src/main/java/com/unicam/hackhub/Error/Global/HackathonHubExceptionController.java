@@ -126,6 +126,11 @@ public class HackathonHubExceptionController {
         return new ResponseEntity<>(  "non esiste l'invito nel db", HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = OperationException.class)
+    public ResponseEntity<Object> OperationError(  OperationException exception){
+        return new ResponseEntity<>(  "Non puoi fare questa azione in questo momento", HttpStatus.NOT_FOUND);
+    }
+
 
 
 

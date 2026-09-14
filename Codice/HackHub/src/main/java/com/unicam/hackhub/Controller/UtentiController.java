@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.management.OperationsException;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -95,7 +96,7 @@ public class UtentiController {
     @PreAuthorize("hasAuthority('UTENTE')")
     public ResponseEntity<Object> listHackathonLiberi(
            // @RequestParam ("usr") Integer utenteId,
-            @RequestParam ("hck") Long hackathonId){
+            @RequestParam ("hck") Long hackathonId) throws OperationsException {
         Team team = gestoreTeam.getTeam(getUtenteId());
         Hackathon hackathon = gestoreHackathon.iscriviHackathon(hackathonId,team);
        team.addHackathonIscritti(hackathon);
