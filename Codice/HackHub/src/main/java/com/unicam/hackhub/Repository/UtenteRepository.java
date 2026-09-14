@@ -12,4 +12,7 @@ public interface UtenteRepository extends JpaRepository<Utente, Long> {
     Optional<Utente> findByNome(String nome);
     Boolean existsByNome(String nome);
     Optional<Utente> findByNomeAndRuolo(String nome, Ruolo ruolo);
+
+    @Override
+    void deleteAll(Iterable<? extends Utente> entities);
 }

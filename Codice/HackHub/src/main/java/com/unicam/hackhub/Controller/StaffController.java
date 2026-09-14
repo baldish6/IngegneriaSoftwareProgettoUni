@@ -21,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import static com.unicam.hackhub.Util.FileDownloadUtil.fileDownload;
 import static com.unicam.hackhub.Util.GetDateFromString.getLocalDate;
@@ -210,11 +211,34 @@ public class StaffController {
 
     @PostMapping("/avv")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity inviaAvvertimento(@RequestParam("sgn") Long segnalazioneId, @RequestBody String messaggio){
+    public ResponseEntity<Object> inviaAvvertimento(@RequestParam("sgn") Long segnalazioneId, @RequestBody String messaggio){
         messaggio = messaggio.replaceAll("\"","");
         gestoreSegnalazioni.inviaAvvertimento(segnalazioneId,messaggio);
         return new ResponseEntity<>("Messaggio di avvertimento inviato",HttpStatus.OK);
     }
+
+    @DeleteMapping("/sospendi")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Object> sospendiTeam(@RequestParam("sgn") Long segnalazioneId){
+
+        Set<MembroTeam> listUtenti = gestoreSegnalazioni.sospendiTeam(segnalazioneId);
+        listUtenti.forEach(x->{
+            Utente utente = x.getUtente();
+            Team team = gestoreTeam.quitTeam(utente);
+            if ( team.isTeamEmpty() ){
+                gestoreRichieste.teamRemoved(team);
+                gestoreHackathon.teamRemoved(team);
+                gestoreTeam.deleteTeam(team);
+            }
+            gestoreUtente.deleteUtente(utente);
+        });
+
+        return new ResponseEntity<>("Team sospeso",HttpStatus.OK);
+
+
+    }
+
+
 
 
 

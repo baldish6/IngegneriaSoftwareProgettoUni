@@ -78,6 +78,10 @@ public class Team {
         return membroTeams;
     }
 
+    public Set<MembroTeam> sospendi(){
+        return membroTeams;
+    }
+
     public Integer getSize() {
         return membroTeams.size();
     }

@@ -14,6 +14,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class GestoreUtente {
     //private static Map<Long, Utente> utenteRepository = new HashMap<>();
@@ -125,6 +127,11 @@ public class GestoreUtente {
             utenteRepository.deleteById(id);
         }
         else throw new UtenteNotExistException();
+    }
+
+    public void deleteUtente(Utente utente) {
+        utenteRepository.delete(utente);
+
     }
 
 }

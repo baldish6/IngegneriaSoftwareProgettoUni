@@ -2,6 +2,8 @@ package com.unicam.hackhub.Model;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 public class Segnalazione {
 
@@ -43,6 +45,10 @@ public class Segnalazione {
 
     public void inviaAvvertimento(String messaggio) {
        this.team.avverti(messaggio);
+    }
+
+    public Set<MembroTeam> sospendiTeam(){
+        return team.sospendi();
     }
 
     @Override

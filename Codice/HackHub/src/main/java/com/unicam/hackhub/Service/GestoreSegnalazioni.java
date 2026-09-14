@@ -2,6 +2,7 @@ package com.unicam.hackhub.Service;
 
 import com.unicam.hackhub.Error.SegnalazioneExistException;
 import com.unicam.hackhub.Error.SegnalazioneNotExistException;
+import com.unicam.hackhub.Model.MembroTeam;
 import com.unicam.hackhub.Model.Mentore;
 import com.unicam.hackhub.Model.Segnalazione;
 import com.unicam.hackhub.Model.Team;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class GestoreSegnalazioni {
@@ -48,6 +50,13 @@ public class GestoreSegnalazioni {
                 .findById(segnalazioneId)
                 .orElseThrow(SegnalazioneNotExistException::new)
                 .inviaAvvertimento(messaggio);
+    }
+
+    public Set<MembroTeam> sospendiTeam(Long segnalazioneId) {
+        return segnalazioneRepository
+                .findById(segnalazioneId)
+                .orElseThrow(SegnalazioneNotExistException::new)
+                .sospendiTeam();
 
     }
 
