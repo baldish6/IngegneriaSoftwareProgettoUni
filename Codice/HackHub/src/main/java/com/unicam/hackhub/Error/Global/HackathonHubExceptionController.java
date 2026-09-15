@@ -93,7 +93,7 @@ public class HackathonHubExceptionController {
 
     @ExceptionHandler(value = SegnalazioneExistException.class)
     public ResponseEntity<Object> SegnExist(  SegnalazioneExistException exception){
-        return new ResponseEntity<>(  "Il team è ià stato segnalato", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(  "Il team è già stato segnalato", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = SegnalazioneNotExistException.class)
