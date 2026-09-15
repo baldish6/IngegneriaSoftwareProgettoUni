@@ -23,6 +23,10 @@ public interface HackathonRepository extends JpaRepository<Hackathon,Long> {
 
     Optional<Hackathon> findByGiudice(Giudice giudice);
 
+    @Query(value = "select * from Hackathon where id = " +
+            "(select id from Hackathon_List_Mentori where list_mentori_id = ?1)",nativeQuery = true)
+    Optional<Hackathon> findByMentore(Long mentorId);
+
 
     //Collection<Hackathon> findActiveHackathons();
 

@@ -16,4 +16,5 @@ public interface SottomissioneRepository extends JpaRepository<Sottomissione,Lon
     Optional<Sottomissione> findByHackathonAndTeam_Nome(Hackathon hackathon, String teamNomeTeam);
     void deleteByTeamAndHackathon(Team team, Hackathon hackathon);
 
+    boolean existsByFilePath(String filePath);
 }

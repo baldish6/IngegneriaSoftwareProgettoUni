@@ -131,6 +131,11 @@ public class HackathonHubExceptionController {
         return new ResponseEntity<>(  "Non puoi fare questa azione in questo momento", HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = SottNomeException.class)
+    public ResponseEntity<Object> NomeSottError(  SottNomeException exception){
+        return new ResponseEntity<>(  "Esiste già una sottomissione con questo nome,scegli un'altro nome", HttpStatus.NOT_FOUND);
+    }
+
 
 
 

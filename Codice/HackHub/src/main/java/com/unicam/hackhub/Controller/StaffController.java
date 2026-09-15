@@ -1,5 +1,7 @@
 package com.unicam.hackhub.Controller;
 
+import com.unicam.hackhub.Error.SottNotExistException;
+import com.unicam.hackhub.Error.TeamNotIscrittoException;
 import com.unicam.hackhub.Model.*;
 import com.unicam.hackhub.Service.*;
 import com.unicam.hackhub.Util.*;
@@ -111,6 +113,45 @@ public class StaffController {
             @RequestParam ("tm") String teamNome)
             throws FileNotFoundException {
         Sottomissione sottomissione= gestoreHackathon.getSottomissione(hackathonId,teamNome);
+        if (sottomissione!=null){
+            return fileDownload(sottomissione.getFilePath());
+        }
+        else {
+            return new ResponseEntity<>(
+                    "Sottomissione del team richiesto per quell'hackathon non c'è nel database",
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /* ------- BOTH --------------------- */
+
+    @GetMapping("/sottoall")
+    @PreAuthorize("hasAuthority('MENTORE') or hasAuthority('GIUDICE')")
+    public ResponseEntity<Object> getSottomissioneOther(
+           // @RequestParam ("hck") Long hackathonId,
+            @RequestParam ("tm") String teamNome)
+            throws FileNotFoundException {
+
+        Authentication authentication = getAuthentication();
+        assert authentication != null;
+        Utente utente = (Utente) authentication.getPrincipal();
+        Hackathon hackathon;
+        assert utente != null;
+        if (utente.getRuolo().equals(Ruolo.GIUDICE)){
+            hackathon = gestoreHackathon.getHackathonByGiudice((Giudice) utente);
+        }
+        else if (utente.getRuolo().equals(Ruolo.MENTORE)){
+            hackathon =gestoreHackathon.getHackathonByMentore((Mentore) utente);
+        }else throw new SottNotExistException();
+
+        if (!hackathon.partecipa(gestoreTeam.getTeam(teamNome))){
+            throw new SottNotExistException();
+        }
+
+
+
+
+        Sottomissione sottomissione= gestoreHackathon.getSottomissione(hackathon.getId(),teamNome);
         if (sottomissione!=null){
             return fileDownload(sottomissione.getFilePath());
         }

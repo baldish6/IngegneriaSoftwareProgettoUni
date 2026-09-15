@@ -130,7 +130,7 @@ public class UtentiController {
     @PreAuthorize("hasAuthority('UTENTE')")
     public ResponseEntity<Object> inviaGiudiceSottomissione(
             @RequestParam ("sid") Long sottId){
-        gestoreHackathon.inviaGiudice(sottId);
+        gestoreHackathon.inviaGiudice(sottId,gestoreTeam.getTeam(getUtenteId()));
         return new ResponseEntity<>("Sottomissione inviata",HttpStatus.OK);
     }
 

@@ -1,5 +1,6 @@
 package com.unicam.hackhub.Service;
 
+import com.unicam.hackhub.Error.SottNomeException;
 import com.unicam.hackhub.Error.SottNotExistException;
 import com.unicam.hackhub.Model.Hackathon;
 import com.unicam.hackhub.Model.Sottomissione;
@@ -48,6 +49,10 @@ public class GestoreSottomissione {
             return sottomissione;
         }
         else {
+            if (sottomissioneRepository.existsByFilePath(fileName)) {
+
+                throw new SottNomeException();
+            }
             upload(file,fileName);
             Sottomissione sottomissione = new Sottomissione(team,hackathon,fileName);
             /*sottomissioneRepository.put(sottomissione.getId(),sottomissione);
@@ -59,7 +64,7 @@ public class GestoreSottomissione {
     }
 
     @Transactional
-    public void InviaGiudice(Long sottId){
+    public void InviaGiudice(Long sottId,Team team){
         /*if (sottomissioneRepository.containsKey(sottId)){
             Sottomissione sottomissione = sottomissioneRepository.get( sottId );
             sottomissione.inviaGiudice();
@@ -67,10 +72,15 @@ public class GestoreSottomissione {
         }else {
             throw new SottNotExistException();
         }*/
-        sottomissioneRepository
+        Sottomissione sottomissione = sottomissioneRepository
                 .findById(sottId)
-                .orElseThrow(SottNotExistException::new)
-                .inviaGiudice();
+                .orElseThrow(SottNotExistException::new);
+                //.inviaGiudice();
+        if (!sottomissione.getTeam().equals(team)) {
+            throw new SottNotExistException();
+        }
+
+        sottomissione.inviaGiudice();
     }
 
     public Sottomissione getSottomissione(Hackathon hackathon, String nomeTeam){
@@ -83,9 +93,13 @@ public class GestoreSottomissione {
                 .findFirst()
                 .orElseThrow(SottNotExistException::new);*/
 
-        return sottomissioneRepository
+
+
+        Sottomissione sottomissione = sottomissioneRepository
                 .findByHackathonAndTeam_Nome(hackathon,nomeTeam)
                 .orElseThrow(SottNotExistException::new);
+
+        return sottomissione;
     }
 
     private void upload(MultipartFile file, String fileName){

@@ -1,9 +1,6 @@
 package com.unicam.hackhub.Service;
 
-import com.unicam.hackhub.Error.HackathonExistException;
-import com.unicam.hackhub.Error.HackathonNotExistException;
-import com.unicam.hackhub.Error.PaymentException;
-import com.unicam.hackhub.Error.SottNotExistException;
+import com.unicam.hackhub.Error.*;
 import com.unicam.hackhub.Model.*;
 import com.unicam.hackhub.Repository.HackathonRepository;
 import com.unicam.hackhub.Util.*;
@@ -71,6 +68,14 @@ public class GestoreHackathon{ // implements ITimeListener {
         return hackathonRepository.findAll();
     }
 
+    public Hackathon getHackathonByGiudice(Giudice giudice) {
+        return hackathonRepository.findByGiudice(giudice).orElseThrow(HackathonNotExistException::new);
+    }
+
+    public Hackathon getHackathonByMentore(Mentore mentore) {
+        return hackathonRepository.findByMentore(mentore.getId()).orElseThrow(HackathonNotExistException::new);
+    }
+
     @Transactional
     public Boolean addMentore(Mentore mentore, Long hackathonId) throws OperationsException {
 
@@ -134,6 +139,9 @@ public class GestoreHackathon{ // implements ITimeListener {
             throw new HackathonNotExistException();
         }*/
         Hackathon hackathon = hackathonRepository.findById(hackathonId).orElseThrow(HackathonNotExistException::new);
+        if (!hackathon.partecipa(team)){
+            throw new TeamNotIscrittoException();
+        }
         return gestoreSottomissione.aggiornaSottomissione(hackathon,team,file,fileName);
     }
 
@@ -153,8 +161,8 @@ public class GestoreHackathon{ // implements ITimeListener {
     }
 
     @Transactional
-    public void inviaGiudice(Long sottId){
-        gestoreSottomissione.InviaGiudice(sottId);
+    public void inviaGiudice(Long sottId,Team team){
+        gestoreSottomissione.InviaGiudice(sottId,team);
     }
 
     @Transactional

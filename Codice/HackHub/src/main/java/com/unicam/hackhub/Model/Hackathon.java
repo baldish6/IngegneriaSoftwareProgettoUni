@@ -102,6 +102,10 @@ public class Hackathon {//implements ITimeListener  {
         listTeams.remove(team);
     }
 
+    public Boolean partecipa(Team team){
+        return listTeams.contains(team);
+    }
+
     public void declareWinner(Team team) throws OperationsException {
        // stato.declareWinner(team);
         addWinner(team);
