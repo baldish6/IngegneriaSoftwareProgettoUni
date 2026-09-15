@@ -12,13 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.management.OperationsException;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class GestoreHackathon {
+public class GestoreHackathon{ // implements ITimeListener {
 
     //private static Map<Integer, Hackathon> hackathonRepository = new HashMap<>();
 
@@ -33,6 +34,7 @@ public class GestoreHackathon {
         this.gestoreSottomissione = gestoreSottomissione;
         this.gestoreValutazioni = gestoreValutazioni;
         this.hackathonRepository = hackathonRepository;
+        //tempo.subscribe(this);
     }
 
     @Transactional
@@ -42,6 +44,7 @@ public class GestoreHackathon {
                 hackathon.dataFineIscrizione(),hackathon.dataInizio(),hackathon.dataFine(),
                 hackathon.luogo(),hackathon.premio(),hackathon.maxTeam(),giudice,mentore
         );
+
         /*
         if (!hackathonRepository.containsKey(hackathon.id())) {
             hackathonRepository.put(hackathon.id(), hackathon1);
@@ -49,9 +52,13 @@ public class GestoreHackathon {
         }
         */
         if (!hackathonRepository.existsByName(hackathon.nome())) {
-           Hackathon resp =  hackathonRepository.save(hackathon1);
-           tempo.subscribe(resp);
+             Hackathon resp =  hackathonRepository.save(hackathon1);
+
+             tempo.subscribe(resp);
+
            resp.update(tempo.getTime());
+
+
            return resp;
         }else {
             throw new HackathonExistException();
@@ -210,10 +217,14 @@ public class GestoreHackathon {
 
         gestoreValutazioni.giveResult(hackathon);
 
-        tempo.unsubscribe(hackathon);
-
+       // tempo.unsubscribe(hackathon);
 
     }
 
-
+    /*
+    @Override
+    public void update(LocalDate time) {
+        //todo
+       // hackathonRepository.findActiveHackathons().forEach(hackathon -> {hackathon.update(time);});
+    }*/
 }

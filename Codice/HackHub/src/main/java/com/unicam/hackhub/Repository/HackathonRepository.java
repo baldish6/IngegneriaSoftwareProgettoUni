@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 public interface HackathonRepository extends JpaRepository<Hackathon,Long> {
+
     Boolean existsByName(String name);
 
     @Query(value = "select * from Hackathon where max_team >= ?1 ",nativeQuery = true)
@@ -16,6 +17,8 @@ public interface HackathonRepository extends JpaRepository<Hackathon,Long> {
     Collection<Hackathon> findLibero(Integer sizeteam);
 
     Optional<Hackathon> findByGiudice(Giudice giudice);
+
+    //Collection<Hackathon> findActiveHackathons();
 
 
 

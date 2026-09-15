@@ -81,6 +81,8 @@ public class StaffController {
         Giudice giudice = gestoreUtente.addGiudice(hackathon.giudice());
         Mentore mentore = gestoreUtente.addMentore(hackathon.mentore());
         Hackathon response = gestoreHackathon.addHackathon(hackathon,giudice,mentore);
+        //System.out.println("staff : " +response);
+        //System.out.println(response!=null);
         if (response!=null){
             return new ResponseEntity<>(response.toString(), HttpStatus.OK);
         }

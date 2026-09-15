@@ -8,8 +8,8 @@ public interface ITempo {
 
     void changeTime(LocalDate timeNow);
 
-
     void subscribe(ITimeListener listener);
 
     void unsubscribe(ITimeListener listener);
+
 }

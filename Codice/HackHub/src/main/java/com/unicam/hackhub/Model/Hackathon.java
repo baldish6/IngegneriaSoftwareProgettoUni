@@ -15,7 +15,7 @@ import java.util.Set;
 import static com.unicam.hackhub.Util.GetDateFromString.getLocalDate;
 
 @Entity
-public class Hackathon implements ITimeListener {
+public class Hackathon implements ITimeListener  {
 
     @Id
     @GeneratedValue
@@ -28,10 +28,10 @@ public class Hackathon implements ITimeListener {
     private String luogo;
     private Float premio;
     private Integer maxTeam;
-    @OneToOne
-    private Team winnerTeam=null;
+    /*@ManyToOne
+    private Team winnerTeam;*/
 
-    @OneToOne
+   @OneToOne(cascade = CascadeType.ALL)
     private HackStato stato;
 
     @OneToOne(cascade = CascadeType.REMOVE)
@@ -43,6 +43,14 @@ public class Hackathon implements ITimeListener {
 
     @ManyToMany
     private Set<Team> listTeams = new HashSet<>();
+
+    /*
+
+
+     hackathon.nome(),hackathon.regolamento(),
+                hackathon.dataFineIscrizione(),hackathon.dataInizio(),hackathon.dataFine(),
+                hackathon.luogo(),hackathon.premio(),hackathon.maxTeam(),giudice,mentore
+     */
 
     public Hackathon( String name, String regolamento, String dataScadenzaIscrizione, String dataInizio, String dataFine, String luogo, Float premio,Integer maxTeam, Giudice giudice, Mentore mentore) {
         this.name = name;
@@ -56,7 +64,8 @@ public class Hackathon implements ITimeListener {
         this.maxTeam = maxTeam;
         this.giudice = giudice;
         this.listMentori.add(mentore);
-        this.stato=new inIscrizione(this);
+        //this.winnerTeam = null;
+      this.stato=new inIscrizione(this);
     }
 
     public Hackathon() {}
@@ -68,6 +77,7 @@ public class Hackathon implements ITimeListener {
 
     public Boolean addMentore(Mentore mentore) throws OperationsException {
         return stato.addMentore(mentore);
+        //return changeMentoreList(mentore);
     }
 
     public void addTeam(Team team) {
@@ -83,6 +93,7 @@ public class Hackathon implements ITimeListener {
 
     public void iscriviHackathon(Team team) throws OperationsException {
         stato.iscriviHackathon(team);
+       // addTeam(team);
     }
 
     public void teamRemoved(Team team){
@@ -91,9 +102,13 @@ public class Hackathon implements ITimeListener {
 
     public void declareWinner(Team team) throws OperationsException {
         stato.declareWinner(team);
+        //addWinner(team);
 
     }
 
+    public void addWinner(Team team){}
+
+    /*
     public void addWinner(Team team){
         if (!listTeams.contains(team)){
             throw new TeamNotIscrittoException();
@@ -102,19 +117,22 @@ public class Hackathon implements ITimeListener {
             throw new WinnerExistException();
         }
         winnerTeam = team;
-        changeState(new Concluso(this));
-    }
+       // changeState(new Concluso(this));
+    }*/
 
     public Boolean canGiveValutazione() throws OperationsException {
         return  stato.canGiveValutazione();
+        //return true;
     }
 
     public Boolean canChangeSottomissione() throws OperationsException {
         return  stato.canChangeSottomissione();
+        //return true;
     }
 
     public Boolean isActive() throws OperationsException {
-        return stato.isActive();
+       return stato.isActive();
+        //return true;
     }
 
 
@@ -167,8 +185,13 @@ public class Hackathon implements ITimeListener {
         return listTeams;
     }
 
+    /*
     public Team getWinnerTeam() {
         return winnerTeam;
+    }*/
+
+   public HackStato getStato() {
+        return stato;
     }
 
     /*
@@ -183,7 +206,6 @@ public class Hackathon implements ITimeListener {
     public int hashCode() {
         return Objects.hash(id, name, regolamento, dataScadenzaIscrizione, dataInizio, dataFine, luogo, premio, maxTeam, giudice);
     }*/
-
 
 
     @Override
@@ -203,11 +225,18 @@ public class Hackathon implements ITimeListener {
                 '}';
     }
 
+    /*@Override
+    public void update(LocalDate time) {
+
+    }*/
+
+
+
     public void changeState(HackStato state) {
         this.stato = state;
     }
 
-    @Override
+
     public void update(LocalDate time) {
 
         if (dataFine.isBefore(time)) {
@@ -220,8 +249,5 @@ public class Hackathon implements ITimeListener {
         if (dataScadenzaIscrizione.isBefore(time)) {
             changeState(new inCorso(this));
         }
-
-
-
     }
 }

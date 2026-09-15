@@ -1,10 +1,10 @@
 package com.unicam.hackhub.Util;
 
 
-import com.unicam.hackhub.Repository.TimeListenerRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 @Service
 public class Tempo implements ITempo {
@@ -12,7 +12,7 @@ public class Tempo implements ITempo {
 
     private LocalDate timeNow = LocalDate.now();
 
-    private TimeListenerRepository  timeListenerRepository;
+    private ArrayList<ITimeListener> timeListenerList= new ArrayList<ITimeListener>();
 
     private Tempo() {}
 
@@ -31,18 +31,19 @@ public class Tempo implements ITempo {
     @Override
     public void changeTime(LocalDate timeNow) {
         this.timeNow = timeNow;
-        timeListenerRepository.findAll().forEach(x->x.update(timeNow));
+        timeListenerList.forEach(listener -> listener.update(timeNow));
     }
 
     @Override
     public void subscribe(ITimeListener listener) {
-        timeListenerRepository.save(listener);
+        timeListenerList.add(listener);
     }
 
     @Override
     public void unsubscribe(ITimeListener listener) {
-        timeListenerRepository.delete(listener);
+       timeListenerList.remove(listener);
     }
+
 
 
 

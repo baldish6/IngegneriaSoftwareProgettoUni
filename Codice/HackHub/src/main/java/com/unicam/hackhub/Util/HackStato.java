@@ -3,10 +3,7 @@ package com.unicam.hackhub.Util;
 import com.unicam.hackhub.Model.Hackathon;
 import com.unicam.hackhub.Model.Mentore;
 import com.unicam.hackhub.Model.Team;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 import javax.management.OperationsException;
 
@@ -17,7 +14,7 @@ public abstract class HackStato {
     @GeneratedValue
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     Hackathon hackathon;
 
     public HackStato(Hackathon hackathon) {
@@ -25,6 +22,11 @@ public abstract class HackStato {
     }
 
     public HackStato() {}
+
+    public Long getId() {
+        return id;
+    }
+
 
     public abstract Boolean canGiveValutazione() throws OperationsException;
     public abstract void iscriviHackathon(Team team) throws OperationsException;
