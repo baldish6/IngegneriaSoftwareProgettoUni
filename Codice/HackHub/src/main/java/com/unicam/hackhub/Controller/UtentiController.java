@@ -104,7 +104,7 @@ public class UtentiController {
     @PreAuthorize("hasAuthority('UTENTE')")
     public ResponseEntity<Object> listHackathonLiberi(
            // @RequestParam ("usr") Integer utenteId,
-            @RequestParam ("hck") Long hackathonId) throws OperationsException {
+            @RequestParam ("hck") Long hackathonId) {
         Team team = gestoreTeam.getTeam(getUtenteId());
         Hackathon hackathon = gestoreHackathon.iscriviHackathon(hackathonId,team);
        team.addHackathonIscritti(hackathon);
@@ -121,7 +121,7 @@ public class UtentiController {
             @RequestParam("fileName") String fileName,
             //@RequestParam ("usr") Integer userId,
             @RequestParam ("hck") Long hackathonId
-    ){
+    )  {
         gestoreHackathon.aggiornaSottomissione(hackathonId,gestoreTeam.getTeam(getUtenteId()),file,fileName);
         return new ResponseEntity<>("File aggiornato",HttpStatus.OK);
     }
@@ -158,7 +158,7 @@ public class UtentiController {
 
     @DeleteMapping("/delsott")
     @PreAuthorize("hasAuthority('UTENTE')")
-    public ResponseEntity<Object> deleteSottomissione( @RequestParam ("hck") Long hackathonId){
+    public ResponseEntity<Object> deleteSottomissione( @RequestParam ("hck") Long hackathonId) {
 
         gestoreHackathon.deleteSottomissione(hackathonId,gestoreTeam.getTeam(getUtenteId()));
         return new ResponseEntity<>("Sottomissione eliminata",HttpStatus.OK);

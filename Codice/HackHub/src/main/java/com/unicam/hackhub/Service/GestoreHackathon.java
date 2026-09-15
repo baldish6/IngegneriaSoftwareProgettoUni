@@ -11,12 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.management.OperationsException;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
-public class GestoreHackathon{ // implements ITimeListener {
+public class GestoreHackathon implements ITimeListener {
 
     //private static Map<Integer, Hackathon> hackathonRepository = new HashMap<>();
 
@@ -31,7 +28,7 @@ public class GestoreHackathon{ // implements ITimeListener {
         this.gestoreSottomissione = gestoreSottomissione;
         this.gestoreValutazioni = gestoreValutazioni;
         this.hackathonRepository = hackathonRepository;
-        //tempo.subscribe(this);
+        tempo.subscribe(this);
     }
 
     @Transactional
@@ -51,7 +48,7 @@ public class GestoreHackathon{ // implements ITimeListener {
         if (!hackathonRepository.existsByName(hackathon.nome())) {
              Hackathon resp =  hackathonRepository.save(hackathon1);
 
-           tempo.subscribe(resp);
+           //tempo.subscribe(resp);
 
            resp.update(tempo.getTime());
 
@@ -77,7 +74,7 @@ public class GestoreHackathon{ // implements ITimeListener {
     }
 
     @Transactional
-    public Boolean addMentore(Mentore mentore, Long hackathonId) throws OperationsException {
+    public Boolean addMentore(Mentore mentore, Long hackathonId) {
 
         /*
 
@@ -111,7 +108,7 @@ public class GestoreHackathon{ // implements ITimeListener {
     }
 
     @Transactional
-    public Hackathon iscriviHackathon(Long hackathonId,Team team) throws OperationsException {
+    public Hackathon iscriviHackathon(Long hackathonId,Team team)  {
         /*if (hackathonRepository.containsKey(hackathonId)){
             Hackathon hackathon = hackathonRepository.get(hackathonId);
             hackathon.iscriviHackathon(team);
@@ -129,7 +126,7 @@ public class GestoreHackathon{ // implements ITimeListener {
     @Transactional
     public Sottomissione aggiornaSottomissione(
             Long hackathonId, Team team,
-            MultipartFile file, String fileName){
+            MultipartFile file, String fileName) {
 
        /* if (hackathonRepository.containsKey(hackathonId)){
             Hackathon hackathon = hackathonRepository.get(hackathonId);
@@ -138,7 +135,11 @@ public class GestoreHackathon{ // implements ITimeListener {
         }else {
             throw new HackathonNotExistException();
         }*/
+
         Hackathon hackathon = hackathonRepository.findById(hackathonId).orElseThrow(HackathonNotExistException::new);
+        if (!hackathon.canChangeSottomissione()){
+            throw new OperationErrException();
+        }
         if (!hackathon.partecipa(team)){
             throw new TeamNotIscrittoException();
         }
@@ -178,6 +179,10 @@ public class GestoreHackathon{ // implements ITimeListener {
         Hackathon hackathon = hackathonRepository.findByGiudice(giudice)
                 .orElseThrow(HackathonNotExistException::new);
 
+        if (!hackathon.canGiveValutazione()){
+            throw new OperationErrException();
+        }
+
         Sottomissione sottomissione = gestoreSottomissione.getSottomissione(hackathon,nomeTeam);
         if (!sottomissione.isInviatoGiudice()){
             throw new SottNotExistException();
@@ -193,8 +198,11 @@ public class GestoreHackathon{ // implements ITimeListener {
     }
 
     @Transactional
-    public void deleteSottomissione(Long hackathonId,Team team){
+    public void deleteSottomissione(Long hackathonId,Team team) {
         Hackathon hackathon = hackathonRepository.findById(hackathonId).orElseThrow(HackathonNotExistException::new);
+        if (!hackathon.canChangeSottomissione()){
+           throw new OperationErrException();
+        }
         gestoreSottomissione.deleteSottomissione(team,hackathon);
     }
 
@@ -219,7 +227,7 @@ public class GestoreHackathon{ // implements ITimeListener {
     }
 
     @Transactional
-    public void declareWinner(Long hackathonId,Team team) throws OperationsException {
+    public void declareWinner(Long hackathonId,Team team) {
         Hackathon hackathon = hackathonRepository.findById(hackathonId).orElseThrow(HackathonNotExistException::new);
         hackathon.declareWinner(team);
         Float premio = hackathon.getPremio();
@@ -230,8 +238,15 @@ public class GestoreHackathon{ // implements ITimeListener {
 
         gestoreValutazioni.giveResult(hackathon);
 
-       tempo.unsubscribe(hackathon);
+       //tempo.unsubscribe(hackathon);
 
+    }
+
+    @Override
+    @Transactional
+    public void update(LocalDate time) {
+        Collection<Hackathon> resp = hackathonRepository.findAttivi();
+        resp.forEach(hackathon -> {hackathon.update(time);});
     }
 
     /*

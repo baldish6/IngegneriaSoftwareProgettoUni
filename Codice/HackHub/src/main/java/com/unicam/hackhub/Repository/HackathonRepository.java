@@ -15,11 +15,12 @@ public interface HackathonRepository extends JpaRepository<Hackathon,Long> {
 
     Boolean existsByName(String name);
 
-    @Query(value = "select * from Hackathon where max_team >= ?1 ",nativeQuery = true)
+    @Query(value = "select * from Hackathon where max_team >= ?1  and id in (select hackathon_id from Hack_Stato where dtype = 'inIscrizione')",nativeQuery = true)
         //@Query(value = "select * from hackathon_list_teams where not list_teams_id = ?2",nativeQuery = true)
     Collection<Hackathon> findLibero(Integer sizeteam);
 
-    //Collection<Hackathon> fin
+    @Query(value = "select * from Hackathon where id in (select hackathon_id from Hack_Stato where dtype != 'Concluso')",nativeQuery = true)
+    Collection<Hackathon> findAttivi();
 
     Optional<Hackathon> findByGiudice(Giudice giudice);
 

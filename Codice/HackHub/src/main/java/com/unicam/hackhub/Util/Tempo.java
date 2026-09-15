@@ -1,6 +1,7 @@
 package com.unicam.hackhub.Util;
 
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -29,9 +30,11 @@ public class Tempo implements ITempo {
     }
 
     @Override
+    //@Transactional
     public void changeTime(LocalDate timeNow) {
         this.timeNow = timeNow;
         timeListenerList.forEach(listener -> listener.update(timeNow));
+
     }
 
     @Override

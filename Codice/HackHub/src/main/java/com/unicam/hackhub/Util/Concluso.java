@@ -1,5 +1,6 @@
 package com.unicam.hackhub.Util;
 
+import com.unicam.hackhub.Error.OperationErrException;
 import com.unicam.hackhub.Model.Hackathon;
 import com.unicam.hackhub.Model.Mentore;
 import com.unicam.hackhub.Model.Team;
@@ -17,33 +18,33 @@ public class Concluso extends HackStato{
 
 
     @Override
-    public Boolean canGiveValutazione() throws OperationsException {
-        throw  new OperationsException();
+    public Boolean canGiveValutazione()  {
+        throw new OperationErrException();
     }
 
     @Override
-    public void iscriviHackathon(Team team) throws OperationsException {
-        throw  new OperationsException();
+    public void iscriviHackathon(Team team) {
+        throw new OperationErrException();
     }
 
     @Override
-    public Boolean canChangeSottomissione() throws OperationsException {
-        throw  new OperationsException();
+    public Boolean canChangeSottomissione() {
+        throw new OperationErrException();
     }
 
     @Override
-    public Boolean isActive() throws OperationsException {
-        throw  new OperationsException();
+    public Boolean isActive()  {
+        throw new OperationErrException();
     }
 
     @Override
-    public Boolean addMentore(Mentore mentore) throws OperationsException {
+    public Boolean addMentore(Mentore mentore)  {
 
-        throw  new OperationsException();
+        throw new OperationErrException();
     }
 
     @Override
-    public void declareWinner(Team team) throws OperationsException {
-        throw  new OperationsException();
+    public void declareWinner(Team team)  {
+        throw new OperationErrException();
     }
 }

@@ -15,7 +15,7 @@ public abstract class HackStato {
     protected Long id;
 
     @ManyToOne // old
-    //@OneToOne  new
+    //@OneToOne  // new
     protected Hackathon hackathon;
 
     public HackStato(Hackathon hackathon) {
@@ -36,11 +36,11 @@ public abstract class HackStato {
         return hackathon;
     }
 
-    public abstract Boolean canGiveValutazione() throws OperationsException;
-    public abstract void iscriviHackathon(Team team) throws OperationsException;
-    public abstract Boolean canChangeSottomissione() throws OperationsException;
-    public abstract Boolean isActive() throws OperationsException;
-    public abstract Boolean addMentore(Mentore mentore) throws OperationsException;
-    public abstract void declareWinner(Team team) throws OperationsException;
+    public abstract Boolean canGiveValutazione();
+    public abstract void iscriviHackathon(Team team);
+    public abstract Boolean canChangeSottomissione();
+    public abstract Boolean isActive() ;
+    public abstract Boolean addMentore(Mentore mentore) ;
+    public abstract void declareWinner(Team team) ;
 
 }

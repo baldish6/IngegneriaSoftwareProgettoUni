@@ -1,5 +1,6 @@
 package com.unicam.hackhub.Util;
 
+import com.unicam.hackhub.Error.OperationErrException;
 import com.unicam.hackhub.Model.Hackathon;
 import com.unicam.hackhub.Model.Mentore;
 import com.unicam.hackhub.Model.Team;
@@ -17,13 +18,13 @@ public class inCorso extends HackStato{
     public inCorso() {}
 
     @Override
-    public Boolean canGiveValutazione() throws OperationsException {
-        throw new OperationsException();
+    public Boolean canGiveValutazione()  {
+        throw new OperationErrException();
     }
 
     @Override
-    public void iscriviHackathon(Team team) throws OperationsException {
-        throw new OperationsException();
+    public void iscriviHackathon(Team team) {
+        throw new OperationErrException();
     }
 
     @Override
@@ -43,8 +44,8 @@ public class inCorso extends HackStato{
     }
 
     @Override
-    public void declareWinner(Team team) throws OperationsException {
-        throw new OperationsException();
+    public void declareWinner(Team team)  {
+        throw new OperationErrException();
 
     }
 }

@@ -16,7 +16,7 @@ import java.util.Set;
 import static com.unicam.hackhub.Util.GetDateFromString.getLocalDate;
 
 @Entity
-public class Hackathon implements ITimeListener  {
+public class Hackathon {// implements ITimeListener  {
 
     @Id
     @GeneratedValue
@@ -29,11 +29,12 @@ public class Hackathon implements ITimeListener  {
     private String luogo;
     private Float premio;
     private Integer maxTeam;
+    private Boolean endValutazione=false;
     /*@ManyToOne
     private Team winnerTeam;*/
 
 
- @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private HackStato stato;
 
 
@@ -78,7 +79,7 @@ public class Hackathon implements ITimeListener  {
 
     }
 
-    public Boolean addMentore(Mentore mentore) throws OperationsException {
+    public Boolean addMentore(Mentore mentore) {
         return stato.addMentore(mentore);
         //return changeMentoreList(mentore);
     }
@@ -94,7 +95,7 @@ public class Hackathon implements ITimeListener  {
 
     }
 
-    public void iscriviHackathon(Team team) throws OperationsException {
+    public void iscriviHackathon(Team team) {
         stato.iscriviHackathon(team);
         //addTeam(team);
     }
@@ -107,7 +108,7 @@ public class Hackathon implements ITimeListener  {
         return listTeams.contains(team);
     }
 
-    public void declareWinner(Team team) throws OperationsException {
+    public void declareWinner(Team team) {
         stato.declareWinner(team);
         //addWinner(team);
 
@@ -129,17 +130,17 @@ public class Hackathon implements ITimeListener  {
        // changeState(new Concluso(this));
     }*/
 
-    public Boolean canGiveValutazione() throws OperationsException {
+    public Boolean canGiveValutazione() {
         return  stato.canGiveValutazione();
         //return true;
     }
 
-    public Boolean canChangeSottomissione() throws OperationsException {
+    public Boolean canChangeSottomissione() {
         return  stato.canChangeSottomissione();
         //return true;
     }
 
-    public Boolean isActive() throws OperationsException {
+    public Boolean isActive()  {
        return stato.isActive();
         //return true;
     }
@@ -194,6 +195,14 @@ public class Hackathon implements ITimeListener  {
         return listTeams;
     }
 
+    public Boolean getEndValutazione() {
+        return endValutazione;
+    }
+
+    public void setEndValutazione() {
+        this.endValutazione = true;
+    }
+
     /*
     public Team getWinnerTeam() {
         return winnerTeam;
@@ -203,6 +212,8 @@ public class Hackathon implements ITimeListener  {
    public HackStato getStato() {
         return stato;
     }
+
+
 
     /*
     @Override
@@ -244,7 +255,8 @@ public class Hackathon implements ITimeListener  {
         this.stato = state;
     }
 
-    @Override
+    //@Override
+    @Transactional
     public void update(LocalDate time) {
 
         if (dataFine.isBefore(time)) {
@@ -256,6 +268,9 @@ public class Hackathon implements ITimeListener  {
 
         else if (dataScadenzaIscrizione.isBefore(time)) {
             changeState(new inCorso(this));
+        }
+        else if (dataScadenzaIscrizione.isAfter(time)) {
+            this.stato=new inIscrizione(this);
         }
 
         else if (this.stato==null) {

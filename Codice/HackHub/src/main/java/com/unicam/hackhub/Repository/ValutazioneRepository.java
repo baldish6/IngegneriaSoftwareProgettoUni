@@ -15,4 +15,6 @@ public interface ValutazioneRepository extends JpaRepository<Valutazione,Long> {
     Collection<Valutazione> findAllBySottomissione_Hackathon(Hackathon hackathon);
     void deleteBySottomissione_HackathonAndSottomissione_Team(Hackathon hackathon, Team team);
 
+
+
 }

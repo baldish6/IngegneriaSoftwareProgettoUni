@@ -1,5 +1,6 @@
 package com.unicam.hackhub.Controller;
 
+import com.unicam.hackhub.Error.OperationErrException;
 import com.unicam.hackhub.Error.SottNotExistException;
 import com.unicam.hackhub.Error.TeamNotIscrittoException;
 import com.unicam.hackhub.Model.*;
@@ -94,7 +95,7 @@ public class StaffController {
     @PostMapping("/addmentore")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> addMentore(
-            @RequestParam ("hck") Long hackathonId , @RequestBody UserInfo mentore) throws OperationsException {
+            @RequestParam ("hck") Long hackathonId , @RequestBody UserInfo mentore) {
         Mentore mentore1 =  gestoreUtente.addMentore(mentore);
 
         Boolean resp = gestoreHackathon.addMentore(mentore1, hackathonId);
@@ -203,9 +204,14 @@ public class StaffController {
             @RequestParam ("rcst") Long richiestaId,
             @RequestBody  String giorno
     ){
+        Mentore mentore = getMentore();
+
+        if(!gestoreHackathon.getHackathonByMentore(mentore).isActive()){
+            throw new OperationErrException();
+        }
 
         String g = giorno.substring(1,11);
-        gestoreRichieste.propostaCall(richiestaId,GetDateFromString.getLocalDate(g),getMentore());
+        gestoreRichieste.propostaCall(richiestaId,GetDateFromString.getLocalDate(g),mentore);
         return new ResponseEntity<>("Appuntamento con team prenotato",HttpStatus.OK);
     }
 
@@ -214,8 +220,13 @@ public class StaffController {
     public ResponseEntity<Object> segnala(@RequestParam("tm") String nomeTeam,
                                           @RequestBody String messaggio
     ){
+        Mentore mentore = getMentore();
+
+        if(!gestoreHackathon.getHackathonByMentore(mentore).isActive()){
+            throw new OperationErrException();
+        }
         messaggio = messaggio.replaceAll("\"","");
-        Segnalazione resp = gestoreSegnalazioni.addSegnalazione(gestoreTeam.getTeam(nomeTeam),getMentore(),messaggio);
+        Segnalazione resp = gestoreSegnalazioni.addSegnalazione(gestoreTeam.getTeam(nomeTeam),mentore,messaggio);
         return new ResponseEntity<>(resp.toString(),HttpStatus.OK);
     }
 
@@ -296,7 +307,7 @@ public class StaffController {
     @PostMapping("/win")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> declareWinner(@RequestParam("sgn") Long hackathonId,
-                                                @RequestParam("tm") String nomeTeam) throws OperationsException {
+                                                @RequestParam("tm") String nomeTeam) {
        Team team = gestoreTeam.getTeam(nomeTeam);
        gestoreHackathon.declareWinner(hackathonId,team);
        return new ResponseEntity<>("Vincitore aggiunto",HttpStatus.OK);
