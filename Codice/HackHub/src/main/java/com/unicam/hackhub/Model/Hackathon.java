@@ -6,6 +6,7 @@ import com.unicam.hackhub.Error.TeamNotIscrittoException;
 import com.unicam.hackhub.Error.WinnerExistException;
 import com.unicam.hackhub.Util.*;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 
 import javax.management.OperationsException;
 import java.time.LocalDate;
@@ -15,7 +16,7 @@ import java.util.Set;
 import static com.unicam.hackhub.Util.GetDateFromString.getLocalDate;
 
 @Entity
-public class Hackathon {//implements ITimeListener  {
+public class Hackathon implements ITimeListener  {
 
     @Id
     @GeneratedValue
@@ -31,10 +32,10 @@ public class Hackathon {//implements ITimeListener  {
     /*@ManyToOne
     private Team winnerTeam;*/
 
-    /*
+
  @OneToOne(cascade = CascadeType.ALL)
     private HackStato stato;
-     */
+
 
     @OneToOne(cascade = CascadeType.REMOVE)
     private Giudice giudice;
@@ -67,7 +68,7 @@ public class Hackathon {//implements ITimeListener  {
         this.giudice = giudice;
         this.listMentori.add(mentore);
         //this.winnerTeam = null;
-      //this.stato=new inIscrizione(this);
+      this.stato=null;
     }
 
     public Hackathon() {}
@@ -78,8 +79,8 @@ public class Hackathon {//implements ITimeListener  {
     }
 
     public Boolean addMentore(Mentore mentore) throws OperationsException {
-        //return stato.addMentore(mentore);
-        return changeMentoreList(mentore);
+        return stato.addMentore(mentore);
+        //return changeMentoreList(mentore);
     }
 
     public void addTeam(Team team) {
@@ -94,8 +95,8 @@ public class Hackathon {//implements ITimeListener  {
     }
 
     public void iscriviHackathon(Team team) throws OperationsException {
-        //stato.iscriviHackathon(team);
-        addTeam(team);
+        stato.iscriviHackathon(team);
+        //addTeam(team);
     }
 
     public void teamRemoved(Team team){
@@ -107,12 +108,14 @@ public class Hackathon {//implements ITimeListener  {
     }
 
     public void declareWinner(Team team) throws OperationsException {
-       // stato.declareWinner(team);
-        addWinner(team);
+        stato.declareWinner(team);
+        //addWinner(team);
 
     }
 
-    public void addWinner(Team team){}
+    public void addWinner(Team team){
+        changeState(new Concluso(this));
+    }
 
     /*
     public void addWinner(Team team){
@@ -127,18 +130,18 @@ public class Hackathon {//implements ITimeListener  {
     }*/
 
     public Boolean canGiveValutazione() throws OperationsException {
-        //return  stato.canGiveValutazione();
-        return true;
+        return  stato.canGiveValutazione();
+        //return true;
     }
 
     public Boolean canChangeSottomissione() throws OperationsException {
-        //return  stato.canChangeSottomissione();
-        return true;
+        return  stato.canChangeSottomissione();
+        //return true;
     }
 
     public Boolean isActive() throws OperationsException {
-       //return stato.isActive();
-        return true;
+       return stato.isActive();
+        //return true;
     }
 
 
@@ -196,10 +199,10 @@ public class Hackathon {//implements ITimeListener  {
         return winnerTeam;
     }*/
 
-    /*
+
    public HackStato getStato() {
         return stato;
-    }*/
+    }
 
     /*
     @Override
@@ -236,26 +239,27 @@ public class Hackathon {//implements ITimeListener  {
     public void update(LocalDate time) {
 
     }*/
-
-
-/*
+    @Transactional
     public void changeState(HackStato state) {
         this.stato = state;
     }
 
-
-
+    @Override
     public void update(LocalDate time) {
 
         if (dataFine.isBefore(time)) {
             changeState(new inValutazione(this));
         }
-        if (dataInizio.isBefore(time)) {
+        else if (dataInizio.isBefore(time)) {
             changeState(new inCorso(this));
         }
 
-        if (dataScadenzaIscrizione.isBefore(time)) {
+        else if (dataScadenzaIscrizione.isBefore(time)) {
             changeState(new inCorso(this));
         }
-    }*/
+
+        else if (this.stato==null) {
+            changeState(new inIscrizione(this));
+        }
+    }
 }

@@ -12,10 +12,11 @@ public abstract class HackStato {
 
     @Id
     @GeneratedValue
-    private Long id;
+    protected Long id;
 
-    @ManyToOne
-    Hackathon hackathon;
+    @ManyToOne // old
+    //@OneToOne  new
+    protected Hackathon hackathon;
 
     public HackStato(Hackathon hackathon) {
         this.hackathon = hackathon;
@@ -27,6 +28,13 @@ public abstract class HackStato {
         return id;
     }
 
+    protected void setId(Long id) {
+        this.id = id;
+    }
+
+    public Hackathon getHackathon() {
+        return hackathon;
+    }
 
     public abstract Boolean canGiveValutazione() throws OperationsException;
     public abstract void iscriviHackathon(Team team) throws OperationsException;

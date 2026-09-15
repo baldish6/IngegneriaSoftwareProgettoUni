@@ -3,15 +3,18 @@ package com.unicam.hackhub.Util;
 import com.unicam.hackhub.Model.Hackathon;
 import com.unicam.hackhub.Model.Mentore;
 import com.unicam.hackhub.Model.Team;
+import jakarta.persistence.Entity;
 
 import javax.management.OperationsException;
 
+@Entity
 public class inCorso extends HackStato{
 
 
     public inCorso(Hackathon hackathon) {
         super(hackathon);
     }
+    public inCorso() {}
 
     @Override
     public Boolean canGiveValutazione() throws OperationsException {

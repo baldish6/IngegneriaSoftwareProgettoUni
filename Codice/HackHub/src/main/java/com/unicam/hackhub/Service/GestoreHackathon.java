@@ -51,9 +51,9 @@ public class GestoreHackathon{ // implements ITimeListener {
         if (!hackathonRepository.existsByName(hackathon.nome())) {
              Hackathon resp =  hackathonRepository.save(hackathon1);
 
-            // tempo.subscribe(resp);
+           tempo.subscribe(resp);
 
-           //resp.update(tempo.getTime());
+           resp.update(tempo.getTime());
 
 
            return resp;
@@ -230,7 +230,7 @@ public class GestoreHackathon{ // implements ITimeListener {
 
         gestoreValutazioni.giveResult(hackathon);
 
-       // tempo.unsubscribe(hackathon);
+       tempo.unsubscribe(hackathon);
 
     }
 
