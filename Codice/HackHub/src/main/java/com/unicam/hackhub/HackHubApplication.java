@@ -3,6 +3,7 @@ package com.unicam.hackhub;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import tools.jackson.databind.JsonNode;
 
 import java.util.function.Consumer;

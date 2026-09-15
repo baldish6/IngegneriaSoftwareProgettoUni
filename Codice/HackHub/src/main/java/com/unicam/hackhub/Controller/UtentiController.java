@@ -56,12 +56,20 @@ public class UtentiController {
        return new ResponseEntity<>(team.toString(), HttpStatus.OK);
     }
 
+    @GetMapping("/usrliblist")
+    @PreAuthorize("hasAuthority('UTENTE')")
+    public ResponseEntity<Object> getUtenteLiberiList() {
+
+        return new ResponseEntity<>(gestoreUtente.getUtentiLiberiList(), HttpStatus.OK);
+
+    }
+
     @PostMapping("/invita")
     @PreAuthorize("hasAuthority('UTENTE')")
-    public ResponseEntity<Object> inviaInvito(@RequestParam ("send") Long utenteId){
+    public ResponseEntity<Object> inviaInvito(@RequestParam ("send") String nomeUtente){
         Utente utente = getUtenteId();
-        Utente utenteInvita = gestoreUtente.getUtente(utenteId);
-        if (!utenteInvita.getRuolo().equals(Ruolo.UTENTE)||utenteId.equals(utente.getId())){
+        Utente utenteInvita = gestoreUtente.getUtente(nomeUtente,Ruolo.UTENTE);
+        if (!utenteInvita.getRuolo().equals(Ruolo.UTENTE)||utenteInvita.getId().equals(utente.getId())){
             throw new UtenteNotExistException();
         }
         Team team = gestoreTeam.getTeam(utente);

@@ -49,5 +49,6 @@ public class GestoreInviti {
         invitoRepository.findByUtente(utente)
                 .orElseThrow(InvitoNotExistException::new)
                 .accettaInvito(team);
+        invitoRepository.deleteByUtente(utente);
     }
 }

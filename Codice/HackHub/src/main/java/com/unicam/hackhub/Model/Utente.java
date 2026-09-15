@@ -12,7 +12,6 @@ import java.util.List;
 @Entity
 public class Utente implements UserDetails {
 
-
     @Id
     @GeneratedValue
     private Long id;

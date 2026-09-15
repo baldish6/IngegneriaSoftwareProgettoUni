@@ -15,7 +15,7 @@ import java.util.Set;
 import static com.unicam.hackhub.Util.GetDateFromString.getLocalDate;
 
 @Entity
-public class Hackathon implements ITimeListener  {
+public class Hackathon {//implements ITimeListener  {
 
     @Id
     @GeneratedValue
@@ -31,8 +31,10 @@ public class Hackathon implements ITimeListener  {
     /*@ManyToOne
     private Team winnerTeam;*/
 
-   @OneToOne(cascade = CascadeType.ALL)
+    /*
+ @OneToOne(cascade = CascadeType.ALL)
     private HackStato stato;
+     */
 
     @OneToOne(cascade = CascadeType.REMOVE)
     private Giudice giudice;
@@ -65,7 +67,7 @@ public class Hackathon implements ITimeListener  {
         this.giudice = giudice;
         this.listMentori.add(mentore);
         //this.winnerTeam = null;
-      this.stato=new inIscrizione(this);
+      //this.stato=new inIscrizione(this);
     }
 
     public Hackathon() {}
@@ -76,8 +78,8 @@ public class Hackathon implements ITimeListener  {
     }
 
     public Boolean addMentore(Mentore mentore) throws OperationsException {
-        return stato.addMentore(mentore);
-        //return changeMentoreList(mentore);
+        //return stato.addMentore(mentore);
+        return changeMentoreList(mentore);
     }
 
     public void addTeam(Team team) {
@@ -92,8 +94,8 @@ public class Hackathon implements ITimeListener  {
     }
 
     public void iscriviHackathon(Team team) throws OperationsException {
-        stato.iscriviHackathon(team);
-       // addTeam(team);
+        //stato.iscriviHackathon(team);
+        addTeam(team);
     }
 
     public void teamRemoved(Team team){
@@ -101,8 +103,8 @@ public class Hackathon implements ITimeListener  {
     }
 
     public void declareWinner(Team team) throws OperationsException {
-        stato.declareWinner(team);
-        //addWinner(team);
+       // stato.declareWinner(team);
+        addWinner(team);
 
     }
 
@@ -121,18 +123,18 @@ public class Hackathon implements ITimeListener  {
     }*/
 
     public Boolean canGiveValutazione() throws OperationsException {
-        return  stato.canGiveValutazione();
-        //return true;
+        //return  stato.canGiveValutazione();
+        return true;
     }
 
     public Boolean canChangeSottomissione() throws OperationsException {
-        return  stato.canChangeSottomissione();
-        //return true;
+        //return  stato.canChangeSottomissione();
+        return true;
     }
 
     public Boolean isActive() throws OperationsException {
-       return stato.isActive();
-        //return true;
+       //return stato.isActive();
+        return true;
     }
 
 
@@ -190,9 +192,10 @@ public class Hackathon implements ITimeListener  {
         return winnerTeam;
     }*/
 
+    /*
    public HackStato getStato() {
         return stato;
-    }
+    }*/
 
     /*
     @Override
@@ -231,10 +234,11 @@ public class Hackathon implements ITimeListener  {
     }*/
 
 
-
+/*
     public void changeState(HackStato state) {
         this.stato = state;
     }
+
 
 
     public void update(LocalDate time) {
@@ -249,5 +253,5 @@ public class Hackathon implements ITimeListener  {
         if (dataScadenzaIscrizione.isBefore(time)) {
             changeState(new inCorso(this));
         }
-    }
+    }*/
 }

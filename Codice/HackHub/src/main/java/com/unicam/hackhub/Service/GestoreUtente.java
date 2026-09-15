@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -134,7 +135,10 @@ public class GestoreUtente {
     @Transactional
     public void deleteUtente(Utente utente) {
         utenteRepository.delete(utente);
+    }
 
+    public  Collection<String> getUtentiLiberiList() {
+        return utenteRepository.findaAllUtentiLiberi();
     }
 
 }

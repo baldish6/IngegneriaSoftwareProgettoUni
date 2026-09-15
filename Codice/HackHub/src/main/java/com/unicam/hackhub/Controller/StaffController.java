@@ -81,8 +81,6 @@ public class StaffController {
         Giudice giudice = gestoreUtente.addGiudice(hackathon.giudice());
         Mentore mentore = gestoreUtente.addMentore(hackathon.mentore());
         Hackathon response = gestoreHackathon.addHackathon(hackathon,giudice,mentore);
-        //System.out.println("staff : " +response);
-        //System.out.println(response!=null);
         if (response!=null){
             return new ResponseEntity<>(response.toString(), HttpStatus.OK);
         }
@@ -96,7 +94,9 @@ public class StaffController {
     public ResponseEntity<Object> addMentore(
             @RequestParam ("hck") Long hackathonId , @RequestBody UserInfo mentore) throws OperationsException {
         Mentore mentore1 =  gestoreUtente.addMentore(mentore);
+
         Boolean resp = gestoreHackathon.addMentore(mentore1, hackathonId);
+
         if (resp == null) {
             return new ResponseEntity<>("Hackathon does not exist or mentore already present", HttpStatus.BAD_REQUEST);
         } else {
@@ -144,7 +144,7 @@ public class StaffController {
     @GetMapping("/listval")
     @PreAuthorize("hasAuthority('GIUDICE')")
     public ResponseEntity<Object> getListaValutazioni(){
-        return new ResponseEntity<>(gestoreHackathon.getListaValutazioni(getGiudice()),HttpStatus.OK);
+        return new ResponseEntity<>(gestoreHackathon.getListaValutazioni(getGiudice()).toString(),HttpStatus.OK);
     }
 
 

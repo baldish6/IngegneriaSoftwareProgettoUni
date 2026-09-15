@@ -67,6 +67,7 @@ public class GestoreSottomissione {
         }else {
             throw new SottNotExistException();
         }*/
+        System.out.println("inviato giudice");
         sottomissioneRepository
                 .findById(sottId)
                 .orElseThrow(SottNotExistException::new)

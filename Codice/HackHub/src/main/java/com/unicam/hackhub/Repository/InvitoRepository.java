@@ -11,4 +11,6 @@ public interface InvitoRepository extends JpaRepository<Invito,Long> {
     Boolean existsByUtente(Utente utente);
 
     Optional<Invito> findByUtente(Utente utente);
+
+    void deleteByUtente(Utente utente);
 }

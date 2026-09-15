@@ -115,5 +115,11 @@ public class Team {
         return messaggi;
     }
 
-
+    @Override
+    public String toString() {
+        return "Team{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                '}';
+    }
 }

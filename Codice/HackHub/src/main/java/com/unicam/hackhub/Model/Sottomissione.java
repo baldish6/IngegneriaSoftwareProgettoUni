@@ -69,7 +69,6 @@ public class Sottomissione {
         return "Sottomissione{" +
                 "id=" + id +
                 ", team=" + team +
-               // ", hackathon=" + hackathon +
                 ", filePath='" + filePath + '\'' +
                 ", inviaGiudice=" + inviaGiudice +
                 '}';

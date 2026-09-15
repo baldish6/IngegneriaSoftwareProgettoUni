@@ -4,10 +4,13 @@ import com.unicam.hackhub.Model.Giudice;
 import com.unicam.hackhub.Model.Hackathon;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface HackathonRepository extends JpaRepository<Hackathon,Long> {
 
     Boolean existsByName(String name);
@@ -16,7 +19,10 @@ public interface HackathonRepository extends JpaRepository<Hackathon,Long> {
         //@Query(value = "select * from hackathon_list_teams where not list_teams_id = ?2",nativeQuery = true)
     Collection<Hackathon> findLibero(Integer sizeteam);
 
+    //Collection<Hackathon> fin
+
     Optional<Hackathon> findByGiudice(Giudice giudice);
+
 
     //Collection<Hackathon> findActiveHackathons();
 

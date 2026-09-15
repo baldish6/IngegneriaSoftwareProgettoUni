@@ -65,7 +65,7 @@ public class Valutazione {
     public String toString() {
         return "Valutazione{" +
                 "id=" + id +
-                ", sottomissione=" + sottomissione +
+                ", sottomissione=" + sottomissione.toString() +
                 ", punteggio=" + punteggio +
                 ", giudizio='" + giudizio + '\'' +
                 '}';
