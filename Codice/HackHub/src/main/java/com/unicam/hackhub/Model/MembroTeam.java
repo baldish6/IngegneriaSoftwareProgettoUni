@@ -36,6 +36,12 @@ public class MembroTeam {
         return utente;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "MembroTeam{" +
+                "id=" + id +
+                ", utente=" + utente +
+                ", team=" + team.getNome() +
+                '}';
+    }
 }

@@ -42,9 +42,10 @@ public class GestoreRichieste {
     @Transactional
     public void propostaCall(Long richiestaId, LocalDate date,Mentore mentore){
 
-        Richiesta richiesta = richiestaRepository.findById(richiestaId).orElseThrow(RichiestaNotExistException::new);
+        Richiesta richiesta = richiestaRepository.findByIdAndMentore(richiestaId,mentore).orElseThrow(RichiestaNotExistException::new);
         Team team = richiesta.getTeam();
-        if (ExtCalendarAPI.prenotaCall(team,date)){
+        Boolean resp = ExtCalendarAPI.prenotaCall(team,date);
+        if (!resp){
             throw new RichiestaNotPrenotataException();
         }
         team.messageCall(mentore,date);

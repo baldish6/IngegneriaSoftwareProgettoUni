@@ -48,9 +48,9 @@ public class Invito {
         if (this.listTeams.contains(team)) {
            // this.listTeams.add(team);
             this.listTeams.remove(team);
-            String messaggio = "Nuovo utente aggiunto"+utente.getNome()+"con id "+utente.getId();
+            String messaggio = "Nuovo utente aggiunto "+utente.getNome()+" con id "+utente.getId();
             team.update(utente,messaggio);
-            String messaggio2 = "Nuovo utente"+utente.getNome()+"con id "+utente.getId()+"ha rifiutato l'invito";
+            String messaggio2 = "L'utente "+utente.getNome()+" con id "+utente.getId()+" ha rifiutato l'invito";
             listTeams.forEach(x->x.update(null,messaggio2));
         }else {
             throw new InvitoNotExistException();

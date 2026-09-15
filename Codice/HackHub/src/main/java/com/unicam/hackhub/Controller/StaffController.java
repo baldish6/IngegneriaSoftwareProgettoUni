@@ -153,16 +153,18 @@ public class StaffController {
     @GetMapping("/listrich")
     @PreAuthorize("hasAuthority('MENTORE')")
     public ResponseEntity<Object> getListRichieste(){
-        return new ResponseEntity<>(gestoreRichieste.getListRichieste(getMentore()),HttpStatus.OK);
+        return new ResponseEntity<>(gestoreRichieste.getListRichieste(getMentore()).toString(),HttpStatus.OK);
     }
 
     @PostMapping("/resprich")
     @PreAuthorize("hasAuthority('MENTORE')")
     public ResponseEntity<Object> propostaCall(
             @RequestParam ("rcst") Long richiestaId,
-            @RequestParam ("time") String data
+            @RequestBody  String giorno
     ){
-        gestoreRichieste.propostaCall(richiestaId,GetDateFromString.getLocalDate(data),getMentore());
+
+        String g = giorno.substring(1,11);
+        gestoreRichieste.propostaCall(richiestaId,GetDateFromString.getLocalDate(g),getMentore());
         return new ResponseEntity<>("Appuntamento con team prenotato",HttpStatus.OK);
     }
 

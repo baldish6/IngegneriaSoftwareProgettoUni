@@ -42,7 +42,7 @@ public class Team {
         DateTimeFormatter dateformatter
                 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        String messagio = "Il mentore "+ mentore.getNome() + "con id "+ mentore.getId()+
+        String messagio = "Il mentore "+ mentore.getNome() + " con id "+ mentore.getId()+
                 " ha creato un incontro il giorno "+ date.format(dateformatter);
 
         messaggi.add(messagio);

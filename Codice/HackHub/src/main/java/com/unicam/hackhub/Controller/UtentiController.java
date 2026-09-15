@@ -147,7 +147,7 @@ public class UtentiController {
 
         Richiesta resp = gestoreRichieste.addRichiesta(team,mentore,messaggio);
 
-        return new ResponseEntity<>(resp,HttpStatus.OK);
+        return new ResponseEntity<>(resp.toString(),HttpStatus.OK);
     }
 
     @GetMapping("/msg")
